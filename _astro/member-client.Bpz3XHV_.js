@@ -1,0 +1,2 @@
+import{t as e}from"./preload-helper.DHhhL8Zf.js";var t,n=``;function r(r,i){let a=r+`
+`+i;if(t&&n!==a)throw Error(`Member components must use the same project.`);return n=a,t??=e(async()=>{let{createClient:e}=await import(`./dist.CTOaXH3b.js`);return{createClient:e}},[]).then(({createClient:e})=>e(r,i,{auth:{detectSessionInUrl:!1,persistSession:!0,autoRefreshToken:!0,flowType:`pkce`}}))}export{r as t};
