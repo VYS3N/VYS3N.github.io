@@ -1,0 +1,22 @@
+---
+import { site } from '../lib/data';
+import { githubData } from '../lib/generated';
+import { t, type Lang } from '../lib/i18n';
+import Icon from './Icon.astro';
+const { lang } = Astro.props as { lang: Lang };
+const data = await githubData();
+const available = data.available && data.user === site.github;
+const offset = available && data.days.length ? new Date(data.days[0].date + 'T12:00:00Z').getUTCDay() : 0;
+---
+<section class="activity-section section-block" aria-labelledby="activity-title">
+  <div class="section-heading"><h2 id="activity-title">{t(lang, 'githubActivity')}</h2><a class="quiet-link" href={`https://github.com/${site.github}`} target="_blank" rel="noopener noreferrer">{t(lang, 'viewGithub')}<Icon name="arrow-up-right" size={15} /></a></div>
+  {available ? <div class="activity-panel">
+    <div class="activity-scroll" tabindex="0" aria-label={t(lang, 'githubActivity')}>
+      <div class="contribution-grid" role="img" aria-label={`${site.github}: ${data.total} ${lang === 'zh' ? '次贡献' : 'contributions'}`}>
+        {Array.from({ length: offset }, () => <span class="contribution-day pad" aria-hidden="true" />)}
+        {data.days.map(day => <span class="contribution-day" data-level={day.level} title={`${day.date}: ${day.count ?? ''} ${lang === 'zh' ? '次贡献' : 'contributions'}`} aria-hidden="true" />)}
+      </div>
+    </div>
+    <div class="activity-legend"><span>{data.total.toLocaleString()} {lang === 'zh' ? '次公开可见贡献' : 'visible contributions'}</span><span class="legend-scale"><span>{lang === 'zh' ? '少' : 'Less'}</span>{[0, 1, 2, 3, 4].map(level => <i class="contribution-day" data-level={level} />)}<span>{lang === 'zh' ? '多' : 'More'}</span></span></div>
+  </div> : <div class="activity-unavailable"><Icon name="brand-github" size={20} /><span>{t(lang, 'githubUnavailable')}</span></div>}
+</section>

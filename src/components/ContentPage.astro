@@ -1,0 +1,59 @@
+---
+import { getEntry, render } from 'astro:content';
+import type { Route } from '../lib/data';
+import { site, friends } from '../lib/data';
+import { friendData } from '../lib/generated';
+import { t, url, localized } from '../lib/i18n';
+import { formatDate } from '../lib/data';
+import Icon from './Icon.astro';
+import Empty from './Empty.astro';
+import Comments from './Comments.astro';
+const { route } = Astro.props as { route: Route };
+const { lang, kind } = route;
+const entry = kind === 'about' || kind === 'academic' ? await getEntry('pages', kind) : undefined;
+const rendered = entry ? await render(entry) : null;
+const Content = rendered?.Content;
+const hasBody = !!entry?.body?.replace(/<!--[\s\S]*?-->/g, '').trim();
+const feed = kind === 'links' ? await friendData() : { items: [] };
+const policies = [ ['privacy-policy', 'privacy', 'shield-lock'], ['terms-and-conditions', 'terms', 'file-text'], ['copyright', 'copyright', 'copyright'], ['disclaimer', 'disclaimer', 'info-circle'] ] as const;
+const policyCopy: Record<string, Record<'zh' | 'en', string[]>> = {
+  'terms/privacy-policy': {
+    zh: ['本站由 GitHub Pages 托管。主题偏好保存在你当前浏览器的本地存储中，切换设备不会自动同步。', site.walineServer ? '评论与阅读量由已配置的 Waline 服务处理。提交评论时，请留意评论表单中要求的信息；评论正文可能公开显示。' : '本站尚未开放评论，也未加载第三方访问分析脚本。', 'GitHub 链接、外部图片或其他外站链接会使用对应服务。访问这些链接时，数据由相应服务处理。'],
+    en: ['This website is hosted on GitHub Pages. Your theme preference is stored locally in your browser and does not sync across devices.', site.walineServer ? 'Comments and view counts are handled by the configured Waline service. Check the information requested by the comment form before submitting. Comment text may be public.' : 'Comments are not open, and no third-party analytics scripts are loaded.', 'GitHub links, external images and other external links use their respective services. Those services handle data when you visit them.'],
+  },
+  'terms/terms-and-conditions': {
+    zh: ['你可以通过本站阅读文章、浏览项目，并使用分类、标签、归档与搜索寻找内容。', '开放评论后，请围绕主题交流，不要提交他人的私人信息、广告或与主题无关的内容。', '如需反馈页面问题或联系作者，可以通过本站的 GitHub 入口联系。'],
+    en: ['You can read articles, browse projects and find content through categories, tags, archives and search.', 'When comments are open, keep discussions relevant. Do not submit private information about others, advertising or unrelated material.', 'To report a website issue or contact the author, use the GitHub link on this site.'],
+  },
+  'terms/copyright': {
+    zh: ['本站原创内容的版权归各自作者所有。文中另有署名或授权说明的内容，以对应说明为准。', '引用本站内容时，请注明作者和原文链接。其他用途请先与作者沟通。', '第三方作品、图片与商标的权利归各自权利人所有。'],
+    en: ['Original content belongs to its respective author. Separately credited or licensed material follows its stated terms.', 'When quoting content from this website, credit the author and link to the original. Contact the author for other uses.', 'Third-party works, images and trademarks belong to their respective owners.'],
+  },
+  'terms/disclaimer': {
+    zh: ['文章记录作者在发布时的认识与实践，后续可能补充或修改。请结合文章日期和你自己的使用场景阅读。', '外部链接由对应站点维护，其内容和可用性可能随时间变化。', '如发现内容错误或涉及你的作品，请通过 GitHub 联系作者。'],
+    en: ['Articles record the author’s understanding and experience at the time of publication and may be updated. Consider their dates and your own context.', 'External websites maintain their own content and availability, which may change over time.', 'If you notice an error or have a question about your work appearing here, contact the author via GitHub.'],
+  },
+};
+---
+<div class="page-heading"><h1>{route.title}</h1>{kind === 'policies' && <p class="page-description">{t(lang, 'policyIntro')}</p>}</div>
+{(kind === 'about' || kind === 'academic') && <>
+  {hasBody && Content ? <div class="prose"><Content /></div> : <p class="intro-placeholder muted">{t(lang, kind === 'about' ? 'noIntro' : 'noAcademic')}</p>}
+  {site.cv && <a class="button subtle" href={site.cv} download><Icon name="download" size={17} />{t(lang, 'downloadCV')}</a>}
+  {kind === 'about' && site.education.length > 0 && <section class="section-block"><h2>{t(lang, 'education')}</h2><div class="education-list">{site.education.map(item => <div class="education-item"><div><h3>{localized(item.title, lang)}</h3><p>{localized(item.detail, lang)}</p></div><span class="muted">{item.start} {item.end && `- ${item.end}`}</span></div>)}</div></section>}
+  {kind === 'academic' && site.interests.length > 0 && <section class="section-block"><h2>{t(lang, 'interests')}</h2><div class="interest-list">{site.interests.map(item => <span>{localized(item, lang)}</span>)}</div></section>}
+  {kind === 'academic' && site.publications.length > 0 && <section class="section-block"><h2>{t(lang, 'publications')}</h2><div class="publications-list">{site.publications.map(item => <article><span class="muted">{item.year}</span><h3>{item.url ? <a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a> : item.title}</h3>{item.authors && <p>{item.authors}</p>}{item.venue && <p class="muted">{item.venue}</p>}{item.code && <a class="text-link" href={item.code} target="_blank" rel="noopener noreferrer">Code<Icon name="arrow-up-right" size={14} /></a>}</article>)}</div></section>}
+  {kind === 'academic' && <section class="section-block"><div class="section-heading"><h2>{t(lang, 'projects')}</h2><a class="quiet-link" href={url(lang, 'projects')} aria-label={t(lang, 'projects')}><Icon name="arrow-up-right" size={17} /></a></div>{site.projects.length ? <div class="project-grid">{site.projects.map(project => <a class="project-card" href={project.url} target="_blank" rel="noopener noreferrer"><h3>{localized(project.title, lang)}<Icon name="arrow-up-right" size={17} /></h3><p>{localized(project.description, lang)}</p></a>)}</div> : <Empty compact title={t(lang, 'noProjects')} detail={t(lang, 'noProjectsDetail')} icon="code" />}</section>}
+  {kind === 'about' && site.tools.length > 0 && <section class="section-block"><h2>{t(lang, 'tools')}</h2><div class="tools-grid">{site.tools.map(tool => <a href={tool.url} target="_blank" rel="noopener noreferrer"><strong>{tool.name}</strong><span>{localized(tool.description, lang)}</span><Icon name="arrow-up-right" size={16} /></a>)}</div></section>}
+  {kind === 'about' && site.mirrors.length > 0 && <section class="section-block"><h2>{t(lang, 'mirror')}</h2><div class="browse-links">{site.mirrors.map(item => <a href={item.url} target="_blank" rel="noopener noreferrer">{item.name}<Icon name="arrow-up-right" size={15} /></a>)}</div></section>}
+  {kind === 'about' && site.sponsorUrl && <section class="section-block"><a class="button subtle" href={site.sponsorUrl} target="_blank" rel="noopener noreferrer">{t(lang, 'sponsor')}<Icon name="heart" size={17} /></a></section>}
+  {kind === 'about' && <Comments lang={lang} path="/about/" />}
+</>}
+{kind === 'projects' && (site.projects.length ? <div class="project-grid">{site.projects.map(project => <article class="project-card">{project.image && <img src={project.image} alt={localized(project.title, lang)} width="640" height="360" loading="lazy" />}<h2><a href={project.url} target="_blank" rel="noopener noreferrer">{localized(project.title, lang)}<Icon name="arrow-up-right" size={18} /></a></h2><p>{localized(project.description, lang)}</p>{project.tags?.length && <div class="interest-list">{project.tags.map(tag => <span>{tag}</span>)}</div>}</article>)}</div> : <Empty title={t(lang, 'noProjects')} detail={t(lang, 'noProjectsDetail')} icon="code" />)}
+{kind === 'links' && <>
+  <section class="friends-section"><h2>{t(lang, 'friends')}</h2>{friends.length ? <div class="friend-grid">{friends.map(friend => <a class="friend-card" href={friend.url} target="_blank" rel="noopener noreferrer">{friend.avatar ? <img src={friend.avatar} alt="" width="42" height="42" loading="lazy" /> : <span class="friend-initial" aria-hidden="true">{friend.name.slice(0, 1)}</span>}<div><h3>{friend.name}</h3><p>{friend.description}</p></div><Icon name="arrow-up-right" size={15} /></a>)}</div> : <Empty compact title={t(lang, 'noFriends')} icon="link" />}</section>
+  <section class="section-block"><div class="section-heading"><h2>{t(lang, 'applyLinks')}</h2><button type="button" class="icon-button" data-copy-site data-copy-value={`${site.title}\n${site.url}\n${localized(site.description, lang)}`} data-copied={t(lang, 'copied')} aria-label={t(lang, 'copySite')} title={t(lang, 'copySite')}><Icon name="copy" size={18} /></button></div><div class="site-link-info"><strong>{site.title}</strong><span>{site.url}</span><p>{localized(site.description, lang)}</p></div><a class="text-link" href={site.walineServer ? '#comments' : `https://github.com/${site.github}`}><span>{site.walineServer ? t(lang, 'comments') : t(lang, 'contact')}</span><Icon name="arrow-up-right" size={15} /></a></section>
+  <section class="section-block"><h2>{t(lang, 'friendFeed')}</h2>{feed.items.length ? <div class="friend-feed">{feed.items.map(item => <article><div class="post-meta"><span>{item.author}</span>{item.date && <time datetime={item.date}>{formatDate(item.date, lang)}</time>}</div><a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}<Icon name="arrow-up-right" size={14} /></a></article>)}</div> : <p class="muted">{t(lang, 'friendFeedEmpty')}</p>}</section>
+  <Comments lang={lang} path="/links/" />
+</>}
+{kind === 'policies' && <div class="policy-grid">{policies.map(([slug, key, icon]) => <a href={url(lang, 'terms/' + slug)}><Icon name={icon} size={22} /><span>{t(lang, key)}</span><Icon name="arrow-right" size={16} /></a>)}</div>}
+{kind === 'policy' && <div class="prose policy-copy">{policyCopy[route.path]?.[lang]?.map(paragraph => <p>{paragraph}</p>)}<p><a href={url(lang, 'terms/list')}>{t(lang, 'policy')}</a></p></div>}

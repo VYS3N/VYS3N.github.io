@@ -1,0 +1,18 @@
+---
+import type { Post } from '../lib/data';
+import { formatDate, postUrl, readTime, tagSlug } from '../lib/data';
+import { t, url, type Lang } from '../lib/i18n';
+interface Props { posts: Post[]; lang: Lang; }
+const { posts, lang } = Astro.props;
+---
+<div class="post-list">
+  {posts.map(post => <article class:list={['post-row', { 'has-cover': post.data.cover }]}>
+    {post.data.cover && <a class="post-thumb" href={postUrl(post, lang)} tabindex="-1" aria-hidden="true"><img src={post.data.cover} alt="" loading="lazy" width="200" height="130" /></a>}
+    <div class="post-row-content">
+      <div class="post-meta"><time datetime={post.data.date.toISOString()}>{formatDate(post.data.date, lang)}</time><span>{readTime(post)} {t(lang, 'minRead')}</span></div>
+      <h2 class="post-title"><a href={postUrl(post, lang)}>{post.data.draft && <span class="draft-label">{lang === 'zh' ? '草稿 / ' : 'Draft / '}</span>}{post.data.title}</a></h2>
+      {post.data.description && <p class="post-description">{post.data.description}</p>}
+      {post.data.tags.length > 0 && <div class="post-tags">{post.data.tags.map(tag => <a href={url(lang, 'tags/' + tagSlug(tag))}>#{tag}</a>)}</div>}
+    </div>
+  </article>)}
+</div>

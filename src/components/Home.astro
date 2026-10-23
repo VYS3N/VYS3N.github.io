@@ -1,0 +1,32 @@
+---
+import { getEntry } from 'astro:content';
+import { site, type Post, textOnly, wordCount, formatDate } from '../lib/data';
+import { t, url, localized, type Lang } from '../lib/i18n';
+import Icon from './Icon.astro';
+import Empty from './Empty.astro';
+import PostList from './PostList.astro';
+import Activity from './Activity.astro';
+const { posts, lang } = Astro.props as { posts: Post[]; lang: Lang };
+const about = await getEntry('pages', 'about');
+const aboutText = textOnly(about?.body || '');
+const lastUpdated = posts.length ? new Date(Math.max(...posts.map(p => (p.data.updated || p.data.date).getTime()))) : null;
+const days = Math.max(1, Math.floor((Date.now() - new Date(site.startDate + 'T00:00:00+08:00').getTime()) / 86400000) + 1);
+const totalWords = posts.reduce((sum, post) => sum + wordCount(post.body), 0);
+---
+<section class="profile-hero">
+  <div class="profile-copy">
+    <h1>{site.name}</h1>
+    {localized(site.tagline, lang) && <p class="profile-tagline">{localized(site.tagline, lang)}</p>}
+    {site.location && <p class="profile-location"><Icon name="map-pin" size={15} />{site.location}</p>}
+    <div class="profile-socials"><a href={`https://github.com/${site.github}`} target="_blank" rel="noopener noreferrer"><Icon name="brand-github" size={17} />GitHub<Icon name="arrow-up-right" size={12} /></a>{site.email && <a href={`mailto:${site.email}`}><Icon name="mail" size={17} />{t(lang, 'contact')}</a>}{site.scholar && <a href={site.scholar} target="_blank" rel="noopener noreferrer"><Icon name="school" size={17} />Scholar</a>}</div>
+  </div>
+  {site.avatar ? <img class="profile-avatar" src={site.avatar} alt={site.name} width="104" height="104" /> : <div class="profile-monogram" aria-hidden="true">V<span>3</span></div>}
+</section>
+<section class="intro-section section-block">
+  <div class="section-heading"><h2>{t(lang, 'intro')}</h2><a href={url(lang, 'about')} class="quiet-link">{t(lang, 'about')}<Icon name="arrow-up-right" size={15} /></a></div>
+  <p class:list={{ muted: !aboutText }}>{aboutText ? aboutText.slice(0, 230) + (aboutText.length > 230 ? '…' : '') : t(lang, 'noIntro')}</p>
+</section>
+{site.education.length > 0 && <section class="section-block"><h2>{t(lang, 'education')}</h2><div class="education-list">{site.education.map(item => <div class="education-item"><div><h3>{item.url ? <a href={item.url} target="_blank" rel="noopener noreferrer">{localized(item.title, lang)}</a> : localized(item.title, lang)}</h3><p>{localized(item.detail, lang)}</p></div><span class="muted">{item.start} {item.end && `- ${item.end}`}</span></div>)}</div></section>}
+<section class="section-block home-writing"><div class="section-heading"><h2>{t(lang, 'latest')}</h2><a class="quiet-link" href={url(lang, 'blog/all')}>{t(lang, 'readAll')}<Icon name="arrow-up-right" size={15} /></a></div>{posts.length ? <PostList posts={posts.slice(0, 3)} lang={lang} /> : <Empty title={t(lang, 'noPosts')} detail={t(lang, 'noPostsDetail')} compact />}</section>
+<section class="section-block statistics-section"><h2>{t(lang, 'statistics')}</h2><dl class="stats-grid"><div><dd data-days-online data-start-date={site.startDate}>{days}</dd><dt>{t(lang, 'days')}</dt></div><div><dd>{posts.length}</dd><dt>{t(lang, 'posts')}</dt></div><div><dd>{totalWords.toLocaleString()}</dd><dt>{t(lang, 'words')}</dt></div><div><dd class="stat-date">{lastUpdated ? formatDate(lastUpdated, lang) : t(lang, 'nothing')}</dd><dt>{t(lang, 'updated')}</dt></div></dl></section>
+<Activity lang={lang} />

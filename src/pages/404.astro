@@ -1,0 +1,5 @@
+---
+import Shell from '../layouts/Shell.astro';
+import Icon from '../components/Icon.astro';
+---
+<Shell lang="zh" path="404" title="页面未找到"><meta slot="head" name="robots" content="noindex" /><div class="not-found"><span class="error-code">404</span><h1>这一页走丢了</h1><p>页面可能已经移动，或者这个地址还没有内容。</p><p class="muted">This page may have moved or does not exist yet.</p><a class="button" href="/"><Icon name="arrow-left" size={17} />返回首页 / Home</a></div></Shell>

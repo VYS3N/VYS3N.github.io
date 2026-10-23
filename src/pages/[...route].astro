@@ -1,0 +1,23 @@
+---
+import Shell from '../layouts/Shell.astro';
+import Home from '../components/Home.astro';
+import Blog from '../components/Blog.astro';
+import ContentPage from '../components/ContentPage.astro';
+import Article from '../components/Article.astro';
+import Search from '../components/Search.astro';
+import { getPosts, makeRoutes, site, type Route, postUrl } from '../lib/data';
+import { localized } from '../lib/i18n';
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return makeRoutes(posts).map(route => ({ params: { route: (route.lang === 'en' ? 'en' + (route.path ? '/' : '') : '') + route.path || undefined }, props: { route } }));
+}
+const { route } = Astro.props as { route: Route };
+const posts = await getPosts();
+const post = route.kind === 'article' ? posts.find(item => item.id === route.postId) : undefined;
+const description = post?.data.description || localized(site.description, route.lang);
+const articleData = post ? { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: post.data.title, description: post.data.description, datePublished: post.data.date.toISOString(), dateModified: (post.data.updated || post.data.date).toISOString(), author: { '@type': 'Person', name: site.name, url: site.url }, mainEntityOfPage: new URL(postUrl(post, route.lang), site.url).href, ...(post.data.cover ? { image: new URL(post.data.cover, site.url).href } : {}) } : null;
+---
+<Shell lang={route.lang} path={route.path} title={route.title} description={description} article={!!post} image={post?.data.cover}>
+  {articleData && <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleData).replace(/</g, '\\u003c')} />}
+  {route.kind === 'home' ? <Home posts={posts} lang={route.lang} /> : ['listing', 'tags', 'tag', 'archives', 'collections', 'collection'].includes(route.kind) ? <Blog route={route} posts={posts} /> : route.kind === 'article' && post ? <Article post={post} posts={posts} lang={route.lang} /> : route.kind === 'search' ? <Search lang={route.lang} /> : <ContentPage route={route} />}
+</Shell>
