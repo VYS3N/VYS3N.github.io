@@ -1,0 +1,11 @@
+---
+import Assets from './Assets.astro';
+import { writingLang } from '../../lib/writing';
+interface Props { label?: string; defaultIndex?: number; syncKey?: string; }
+const { label = writingLang(Astro.url) === 'zh' ? '内容页签' : 'Content tabs', defaultIndex = 0, syncKey } = Astro.props;
+---
+<Assets />
+<div class="writing-tabs" data-writing-tabs data-sync-key={syncKey} data-default-tab={Math.max(0, Math.floor(defaultIndex))}>
+  <div class="writing-tab-nav" data-tabs-nav aria-label={label} hidden></div>
+  <div class="writing-tab-panels"><slot /></div>
+</div>

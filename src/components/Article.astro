@@ -7,6 +7,7 @@ import Toc from './Toc.astro';
 import Icon from './Icon.astro';
 import Comments from './Comments.astro';
 import PostList from './PostList.astro';
+import * as writing from './writing';
 const { post, posts, lang } = Astro.props as { post: Post; posts: Post[]; lang: Lang };
 const { Content, headings } = await render(post);
 const position = posts.findIndex(item => item.id === post.id);
@@ -30,7 +31,7 @@ const commentPath = url('zh', 'blog/' + postSlug(post));
 <div class:list={['article-grid', { 'without-toc': !headings.some(heading => heading.depth > 1 && heading.depth < 5) }]}>
   <Toc headings={headings} lang={lang} />
   <div class="reading-column">
-    <article class="prose article-body" lang={post.data.lang === 'zh' ? 'zh-CN' : 'en'} data-article-body data-copy-label={t(lang, 'copyLink')} data-copied={t(lang, 'copied')} data-copy-failed={t(lang, 'copyFailed')} data-image-label={t(lang, 'fullImage')}><Content /></article>
+    <article class="prose article-body" lang={post.data.lang === 'zh' ? 'zh-CN' : 'en'} data-article-body data-copy-label={t(lang, 'copyLink')} data-copied={t(lang, 'copied')} data-copy-failed={t(lang, 'copyFailed')} data-image-label={t(lang, 'fullImage')}><Content components={writing} /></article>
     <div class="article-attribution"><div><span class="author-monogram">V</span><span>{site.name}<small>{t(lang, 'original')}</small></span></div><p>{t(lang, 'copyrightNote')}</p></div>
     <div class="article-share"><span>{t(lang, 'share')}</span><button class="button subtle small" data-copy-link data-copied={t(lang, 'copied')} data-copy-failed={t(lang, 'copyFailed')}><Icon name="link" size={16} />{t(lang, 'copyLink')}</button><button class="button subtle small" data-share-qr data-qr-hint={t(lang, 'qrHint')}><Icon name="qrcode" size={17} />{t(lang, 'qr')}</button></div>
     {series && <section class="series-navigation section-block"><div class="section-heading"><h2>{t(lang, 'inCollection')}</h2><a class="quiet-link" href={url(lang, 'collection/' + series.slug)}>{localized(series.title, lang)}<Icon name="arrow-up-right" size={14} /></a></div><ol>{inSeries.map(item => <li class:list={{ current: item.id === post.id }}>{item.id === post.id ? <span aria-current="page">{item.data.title}</span> : <a href={postUrl(item, lang)}>{item.data.title}</a>}</li>)}</ol></section>}

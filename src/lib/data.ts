@@ -26,7 +26,7 @@ export async function getPosts(): Promise<Post[]> {
 export const postSlug = (post: Post) => post.data.slug || post.id.replace(/\.(md|mdx)$/, '');
 export const postUrl = (post: Post, lang: Lang) => url(lang, 'blog/' + postSlug(post));
 export function textOnly(body = ''): string {
-  return body.replace(/<!--[\s\S]*?-->/g, '').replace(/<[^>]*>/g, '').replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/[`#*_>~|]/g, '').replace(/\s+/g, ' ').trim();
+  return body.replace(/<!--[\s\S]*?-->/g, '').replace(/\{\/\*[\s\S]*?\*\/\}/g, '').replace(/^(?:import|export)\s[\s\S]*?(?:\n\s*\n|$)/gm, '').replace(/<[^>]*>/g, '').replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/[`#*_>~|]/g, '').replace(/\s+/g, ' ').trim();
 }
 export function wordCount(body = ''): number {
   const clean = textOnly(body);

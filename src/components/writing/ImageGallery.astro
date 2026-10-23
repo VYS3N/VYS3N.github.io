@@ -1,0 +1,10 @@
+---
+import Assets from './Assets.astro';
+import { writingMedia } from '../../lib/writing';
+interface Props { images: { src: string; alt: string; caption?: string; width?: number; height?: number }[]; columns?: 1 | 2 | 3; }
+const { images, columns = 2 } = Astro.props;
+---
+<Assets />
+<div class="writing-gallery" data-image-gallery style={`--writing-columns:${Math.max(1, Math.min(3, columns))}`}>
+  {images.map(image => <figure><img src={writingMedia(image.src)} alt={image.alt} width={image.width} height={image.height} loading="lazy" />{image.caption && <figcaption>{image.caption}</figcaption>}</figure>)}
+</div>

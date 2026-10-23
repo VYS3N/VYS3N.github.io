@@ -1,6 +1,6 @@
 # VYS3N personal website
 
-基于 Astro 的个人主页与 Markdown 博客。中文界面在 `/`，英文界面在 `/en/`。切换界面语言时，文章正文保持原文。
+基于 Astro 的个人主页与 Markdown / MDX 博客。中文界面在 `/`，英文界面在 `/en/`。切换界面语言时，文章正文保持原文。
 
 访问地址：**https://vys3n.github.io/**
 
@@ -66,6 +66,14 @@ npm run new:post -- "我的第一篇文章" --slug first-post --category tech
 ```
 
 文件生成于 `src/content/posts/first-post.md`，默认为草稿，不会正式发布。支持的分类有 `tech`（技术）、`research`（学习与思考）、`daily`（日常）、`journal`（月记）。也可以复制 `content/templates/post.md` 到文章目录。
+
+需要页签、折叠、步骤、卡片、图集或视频等组件时，增加 `--mdx`：
+
+```bash
+npm run new:post -- "我的组件文章" --slug my-components --category tech --mdx
+```
+
+组件已内置，无需 import。完整示例在 `content/templates/writing.mdx`；详细接口见 [MDX 写作组件指南](docs/writing-components.md)。MDX 文件只使用自己编写或检查过的源码。普通 `.md` 写作方式保持不变。
 
 文章头部的字段：
 
@@ -153,3 +161,5 @@ npm run test:site
 ## 设计参照
 
 信息架构和功能参照 https://axi404.top/ ，以独立源码实现。未复制参照站的个人资料、文章、图片、访客数据或服务配置。
+
+参考主题公开于 https://github.com/Axi404/Axi-Theme 。此次通用写作组件的具体对照与边界见 [功能对照](docs/reference-review.md)。

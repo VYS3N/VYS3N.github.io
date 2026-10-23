@@ -1,0 +1,8 @@
+---
+import Assets from './Assets.astro';
+import { writingLang } from '../../lib/writing';
+interface Props { items: { id: string; label: string }[]; title?: string; }
+const { items, title = writingLang(Astro.url) === 'zh' ? '本节内容' : 'In this section' } = Astro.props;
+---
+<Assets />
+<nav class="writing-manual-toc" aria-label={title}><p>{title}</p><ol>{items.map(item => <li><a href={`#${encodeURIComponent(item.id.replace(/^#/, ''))}`}>{item.label}</a></li>)}</ol></nav>

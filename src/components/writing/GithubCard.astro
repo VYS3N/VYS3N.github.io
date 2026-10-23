@@ -1,0 +1,19 @@
+---
+import Assets from './Assets.astro';
+import Icon from '../Icon.astro';
+import { writingLang } from '../../lib/writing';
+interface Props { repo: string; description?: string; }
+const { repo: rawRepo, description } = Astro.props;
+const repo = rawRepo.trim().replace(/^https:\/\/github\.com\//i, '').replace(/\/$/, '');
+if (!/^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\/[A-Za-z0-9_.-]+$/.test(repo) || /\/(\.|\.\.)$/.test(repo)) throw new Error('GithubCard repo must be owner/repository.');
+const lang = writingLang(Astro.url);
+---
+<Assets />
+<article class="writing-github writing-card" data-github-card data-repository={repo}>
+  <div class="writing-card-body">
+    <p class="writing-card-title"><Icon name="brand-github" size={21} /><a href={`https://github.com/${repo}`} target="_blank" rel="noopener noreferrer">{repo}<Icon name="arrow-up-right" size={15} /></a></p>
+    <p class="writing-card-description" data-github-description data-custom-description={!!description} hidden={!description}>{description}</p>
+    <div class="writing-github-meta" data-github-meta hidden><span data-github-language></span><span><Icon name="star" size={15} /><span data-github-stars></span></span><span><Icon name="git-fork" size={15} /><span data-github-forks></span></span><span data-github-license hidden></span></div>
+    <div class="writing-service-status"><span data-github-status role="status"></span><button class="writing-text-button" data-github-retry type="button" hidden>{lang === 'zh' ? '重试' : 'Retry'}</button></div>
+  </div>
+</article>

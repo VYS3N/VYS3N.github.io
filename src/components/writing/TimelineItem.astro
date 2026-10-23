@@ -1,0 +1,5 @@
+---
+interface Props { title: string; date: string; datetime?: string; }
+const { title, date, datetime } = Astro.props;
+---
+<li class="writing-timeline-item"><time datetime={datetime}>{date}</time><div><h3>{title}</h3><slot /></div></li>

@@ -1,0 +1,30 @@
+---
+import Assets from './Assets.astro';
+import Icon from '../Icon.astro';
+import { writingLang, writingMedia } from '../../lib/writing';
+interface Props { src: string; title: string; poster?: string; caption?: string; }
+const { src, title, poster, caption } = Astro.props;
+const address = new URL(writingMedia(src), Astro.url);
+let embed = '';
+if (['youtube.com', 'www.youtube.com', 'youtu.be', 'www.youtube-nocookie.com'].includes(address.hostname)) {
+  const id = address.hostname === 'youtu.be' ? address.pathname.slice(1) : address.searchParams.get('v') || address.pathname.match(/^\/(?:embed|shorts)\/([\w-]+)/)?.[1];
+  if (!id || !/^[\w-]{11}$/.test(id)) throw new Error('Video needs a valid YouTube video ID.');
+  embed = `https://www.youtube-nocookie.com/embed/${id}`;
+} else if (['www.bilibili.com', 'bilibili.com', 'player.bilibili.com'].includes(address.hostname)) {
+  const id = address.searchParams.get('bvid') || address.pathname.match(/\/video\/(BV[A-Za-z0-9]+)/)?.[1];
+  if (!id || !/^BV[A-Za-z0-9]{10}$/.test(id)) throw new Error('Video needs a valid Bilibili BV ID.');
+  embed = `https://player.bilibili.com/player.html?bvid=${id}&autoplay=0`;
+} else if (!/\.(mp4|webm|ogg|ogv)$/i.test(address.pathname)) {
+  throw new Error('Video supports local MP4/WebM/Ogg files, YouTube and Bilibili URLs.');
+}
+const lang = writingLang(Astro.url);
+---
+<Assets />
+<figure class="writing-video">
+  {embed ? <div class="writing-video-embed" data-video-embed data-video-src={embed} data-video-title={title}>
+    {poster && <img src={writingMedia(poster)} alt="" loading="lazy" />}
+    <div class="writing-video-prompt"><p>{title}</p><button class="button subtle" type="button" data-load-video><Icon name="player-play" size={18} />{lang === 'zh' ? '加载视频' : 'Load video'}</button><p class="writing-video-note">{lang === 'zh' ? '点击后连接视频提供方。' : 'Connects to the video provider when loaded.'}</p></div>
+  </div> : <video src={src} poster={poster ? writingMedia(poster) : undefined} controls preload="metadata" playsinline aria-label={title}><a href={src}>{title}</a></video>}
+  {embed && <p class="writing-video-source"><a href={src} target="_blank" rel="noopener noreferrer">{lang === 'zh' ? '在原网站观看' : 'Watch on the original website'}</a></p>}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

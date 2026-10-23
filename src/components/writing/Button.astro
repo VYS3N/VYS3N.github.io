@@ -1,0 +1,11 @@
+---
+import Assets from './Assets.astro';
+import Icon from '../Icon.astro';
+import { writingHref, externalLink } from '../../lib/writing';
+interface Props { href: string; variant?: 'primary' | 'subtle'; icon?: string; }
+const { href, variant = 'subtle', icon } = Astro.props;
+const target = writingHref(href);
+const external = externalLink(target);
+---
+<Assets />
+<a class:list={['button', 'writing-button', { subtle: variant === 'subtle' }]} href={target} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{icon && <Icon name={icon} size={17} />}<slot /></a>

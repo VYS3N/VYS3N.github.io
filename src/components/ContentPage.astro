@@ -8,6 +8,7 @@ import { formatDate } from '../lib/data';
 import Icon from './Icon.astro';
 import Empty from './Empty.astro';
 import Comments from './Comments.astro';
+import * as writing from './writing';
 const { route } = Astro.props as { route: Route };
 const { lang, kind } = route;
 const entry = kind === 'about' || kind === 'academic' ? await getEntry('pages', kind) : undefined;
@@ -37,7 +38,7 @@ const policyCopy: Record<string, Record<'zh' | 'en', string[]>> = {
 ---
 <div class="page-heading"><h1>{route.title}</h1>{kind === 'policies' && <p class="page-description">{t(lang, 'policyIntro')}</p>}</div>
 {(kind === 'about' || kind === 'academic') && <>
-  {hasBody && Content ? <div class="prose"><Content /></div> : <p class="intro-placeholder muted">{t(lang, kind === 'about' ? 'noIntro' : 'noAcademic')}</p>}
+  {hasBody && Content ? <div class="prose" data-article-body data-copied={t(lang, 'copied')} data-copy-failed={t(lang, 'copyFailed')} data-image-label={t(lang, 'fullImage')}><Content components={writing} /></div> : <p class="intro-placeholder muted">{t(lang, kind === 'about' ? 'noIntro' : 'noAcademic')}</p>}
   {site.cv && <a class="button subtle" href={site.cv} download><Icon name="download" size={17} />{t(lang, 'downloadCV')}</a>}
   {kind === 'about' && site.education.length > 0 && <section class="section-block"><h2>{t(lang, 'education')}</h2><div class="education-list">{site.education.map(item => <div class="education-item"><div><h3>{localized(item.title, lang)}</h3><p>{localized(item.detail, lang)}</p></div><span class="muted">{item.start} {item.end && `- ${item.end}`}</span></div>)}</div></section>}
   {kind === 'academic' && site.interests.length > 0 && <section class="section-block"><h2>{t(lang, 'interests')}</h2><div class="interest-list">{site.interests.map(item => <span>{localized(item, lang)}</span>)}</div></section>}

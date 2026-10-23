@@ -64,7 +64,32 @@ const dialog = document.querySelector<HTMLDialogElement>('[data-media-dialog]');
 const dialogContent = dialog?.querySelector<HTMLElement>('[data-dialog-content]');
 dialog?.querySelector('[data-close-dialog]')?.addEventListener('click', () => dialog.close());
 dialog?.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
-dialog?.addEventListener('close', () => dialogContent?.replaceChildren());
+let lightboxImages: HTMLImageElement[] = [];
+let lightboxIndex = 0;
+function showLightboxImage(index: number) {
+  if (!dialog || !dialogContent || !lightboxImages.length) return;
+  lightboxIndex = (index + lightboxImages.length) % lightboxImages.length;
+  const original = lightboxImages[lightboxIndex];
+  const full = document.createElement('img'); full.src = original.currentSrc || original.src; full.alt = original.alt; full.className = 'lightbox-image';
+  const figure = document.createElement('figure'); figure.className = 'lightbox-gallery'; figure.append(full);
+  const captionText = original.closest('figure')?.querySelector('figcaption')?.textContent || original.alt;
+  if (captionText) { const caption = document.createElement('figcaption'); caption.textContent = captionText; figure.append(caption); }
+  if (lightboxImages.length > 1) {
+    const navigation = document.createElement('div'); navigation.className = 'lightbox-navigation';
+    const previous = document.createElement('button'); previous.type = 'button'; previous.textContent = lang === 'zh' ? '上一张' : 'Previous'; previous.dataset.galleryPrevious = '';
+    const next = document.createElement('button'); next.type = 'button'; next.textContent = lang === 'zh' ? '下一张' : 'Next'; next.dataset.galleryNext = '';
+    const position = document.createElement('span'); position.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`; position.setAttribute('role', 'status');
+    previous.addEventListener('click', () => { showLightboxImage(lightboxIndex - 1); dialogContent.querySelector<HTMLButtonElement>('[data-gallery-previous]')?.focus(); });
+    next.addEventListener('click', () => { showLightboxImage(lightboxIndex + 1); dialogContent.querySelector<HTMLButtonElement>('[data-gallery-next]')?.focus(); });
+    navigation.append(previous, position, next); figure.append(navigation);
+  }
+  dialogContent.replaceChildren(figure);
+}
+dialog?.addEventListener('close', () => { dialogContent?.replaceChildren(); lightboxImages = []; });
+dialog?.addEventListener('keydown', event => {
+  if (lightboxImages.length < 2 || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+  event.preventDefault(); showLightboxImage(lightboxIndex + (event.key === 'ArrowRight' ? 1 : -1)); dialog.querySelector<HTMLButtonElement>('[data-close-dialog]')?.focus();
+});
 document.querySelectorAll<HTMLElement>('[data-share-qr]').forEach(button => button.addEventListener('click', async () => {
   if (!dialog || !dialogContent) return;
   try {
@@ -86,9 +111,14 @@ if (articleBody) {
     pre.append(button);
   });
   articleBody.querySelectorAll<HTMLImageElement>('img').forEach(image => {
-    if (image.closest('a')) return;
+    if (image.closest('a,[data-video-embed],.writing-card')) return;
     image.tabIndex = 0; image.setAttribute('role', 'button'); image.setAttribute('aria-label', `${articleBody.dataset.imageLabel}: ${image.alt}`); image.classList.add('zoomable');
-    const openImage = () => { if (!dialog || !dialogContent) return; const full = document.createElement('img'); full.src = image.currentSrc || image.src; full.alt = image.alt; full.className = 'lightbox-image'; dialogContent.replaceChildren(full); dialog.showModal(); };
+    const openImage = () => {
+      if (!dialog || !dialogContent) return;
+      const group = image.closest('[data-image-gallery]');
+      lightboxImages = group ? [...group.querySelectorAll<HTMLImageElement>('img')] : [image];
+      showLightboxImage(lightboxImages.indexOf(image)); dialog.showModal();
+    };
     image.addEventListener('click', openImage); image.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openImage(); } });
   });
   const diagramNodes: HTMLElement[] = [];

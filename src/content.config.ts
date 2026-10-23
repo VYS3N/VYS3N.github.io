@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 const dateInShanghai = z.preprocess(value => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value + 'T00:00:00+08:00' : value, z.coerce.date());
 
 const posts = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/posts' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
   schema: z.object({
     title: z.string().min(1),
     description: z.string().default(''),
@@ -24,7 +24,7 @@ const posts = defineCollection({
   }),
 });
 const pages = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/pages' }),
+  loader: glob({ pattern: '*.{md,mdx}', base: './src/content/pages' }),
   schema: z.object({ title: z.string().optional() }),
 });
 export const collections = { posts, pages };

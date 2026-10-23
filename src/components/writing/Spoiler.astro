@@ -1,0 +1,8 @@
+---
+import Assets from './Assets.astro';
+import { writingLang } from '../../lib/writing';
+interface Props { label?: string; }
+const { label = writingLang(Astro.url) === 'zh' ? '显示隐藏内容' : 'Reveal hidden content' } = Astro.props;
+---
+<Assets />
+<details class="writing-spoiler"><summary>{label}</summary><div><slot /></div></details>

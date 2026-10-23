@@ -1,0 +1,7 @@
+---
+import Assets from './Assets.astro';
+interface Props { columns?: 1 | 2 | 3; }
+const { columns = 2 } = Astro.props;
+---
+<Assets />
+<div class="writing-card-grid" style={`--writing-columns:${Math.max(1, Math.min(3, columns))}`}><slot /></div>
