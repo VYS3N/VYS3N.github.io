@@ -1,8 +1,0 @@
----
-import tabler from '@iconify-json/tabler/icons.json';
-interface Props { name: string; size?: number; class?: string; }
-const { name, size = 20, class: className = '' } = Astro.props;
-const icons = tabler.icons as Record<string, { body: string; width?: number; height?: number }>;
-const icon = icons[name] || icons['circle'];
----
-<svg class:list={['icon', className]} width={size} height={size} viewBox={`0 0 ${icon.width || 24} ${icon.height || 24}`} aria-hidden="true" focusable="false" set:html={icon.body} />

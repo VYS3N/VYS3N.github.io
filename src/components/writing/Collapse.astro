@@ -1,7 +1,0 @@
----
-import Assets from './Assets.astro';
-interface Props { title: string; open?: boolean; }
-const { title, open = false } = Astro.props;
----
-<Assets />
-<details class="writing-collapse" open={open}><summary>{title}</summary><div class="writing-collapse-content"><slot /></div></details>

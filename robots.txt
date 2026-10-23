@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vys3n.github.io/sitemap-index.xml

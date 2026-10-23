@@ -1,0 +1,875 @@
+{
+  "backend": {
+    "name": "github",
+    "repo": "VYS3N/vys3n-site-source",
+    "branch": "main",
+    "auth_methods": [
+      "token"
+    ]
+  },
+  "site_url": "https://vys3n.github.io",
+  "display_url": "https://vys3n.github.io",
+  "logo_url": "/favicon.svg",
+  "media_folder": "content/media",
+  "public_folder": "/media",
+  "output": {
+    "omit_empty_optional_fields": true
+  },
+  "collections": [
+    {
+      "name": "posts",
+      "label": "文章 · Markdown",
+      "label_singular": "文章",
+      "folder": "src/content/posts",
+      "extension": "md",
+      "format": "frontmatter",
+      "create": true,
+      "identifier_field": "slug",
+      "slug": "{{slug}}",
+      "preview_path": "blog/{{slug}}/",
+      "summary": "{{title}} · {{date}}",
+      "fields": [
+        {
+          "name": "title",
+          "label": "文章标题",
+          "widget": "string"
+        },
+        {
+          "name": "slug",
+          "label": "固定网址标识",
+          "widget": "string",
+          "pattern": [
+            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符；不能使用分类名称"
+          ],
+          "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
+        },
+        {
+          "name": "description",
+          "label": "摘要",
+          "widget": "text",
+          "required": false
+        },
+        {
+          "name": "date",
+          "label": "发布日期",
+          "widget": "datetime",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "default": "{{now}}",
+          "hint": "按北京时间解释；未来日期的文章会等到日期到达后构建发布。"
+        },
+        {
+          "name": "updated",
+          "label": "更新日期",
+          "widget": "datetime",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": false
+        },
+        {
+          "name": "category",
+          "label": "分类",
+          "widget": "select",
+          "default": "tech",
+          "options": [
+            {
+              "label": "技术",
+              "value": "tech"
+            },
+            {
+              "label": "学习与思考",
+              "value": "research"
+            },
+            {
+              "label": "日常",
+              "value": "daily"
+            },
+            {
+              "label": "月记",
+              "value": "journal"
+            }
+          ]
+        },
+        {
+          "name": "tags",
+          "label": "标签",
+          "widget": "list",
+          "required": false
+        },
+        {
+          "name": "collection",
+          "label": "所属合集",
+          "widget": "string",
+          "required": false,
+          "pattern": [
+            "^[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符"
+          ],
+          "hint": "填写合集的网址标识；不属于合集时留空。"
+        },
+        {
+          "name": "order",
+          "label": "合集内顺序",
+          "widget": "number",
+          "value_type": "int",
+          "required": false,
+          "min": 0
+        },
+        {
+          "name": "lang",
+          "label": "正文语言",
+          "widget": "select",
+          "default": "zh",
+          "options": [
+            {
+              "label": "中文",
+              "value": "zh"
+            },
+            {
+              "label": "English",
+              "value": "en"
+            }
+          ]
+        },
+        {
+          "name": "draft",
+          "label": "保留为草稿",
+          "widget": "boolean",
+          "default": true,
+          "hint": "开启时不出现在公开网站。写作完成后关闭此项再保存，才会正式发布。"
+        },
+        {
+          "name": "comments",
+          "label": "允许评论",
+          "widget": "boolean",
+          "default": true
+        },
+        {
+          "name": "cover",
+          "label": "封面图片",
+          "widget": "image",
+          "required": false
+        },
+        {
+          "name": "coverAlt",
+          "label": "封面图片说明",
+          "widget": "string",
+          "required": false
+        },
+        {
+          "name": "coverCredit",
+          "label": "封面来源链接",
+          "widget": "string",
+          "required": false,
+          "pattern": [
+            "^https?://[^\\s]+$",
+            "填写完整的 HTTP 或 HTTPS 地址"
+          ]
+        },
+        {
+          "name": "body",
+          "label": "正文",
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "name": "mdx",
+      "label": "文章 · MDX 源码",
+      "label_singular": "文章",
+      "folder": "src/content/posts",
+      "extension": "mdx",
+      "format": "frontmatter",
+      "create": true,
+      "identifier_field": "slug",
+      "slug": "{{slug}}",
+      "preview_path": "blog/{{slug}}/",
+      "summary": "{{title}} · {{date}}",
+      "fields": [
+        {
+          "name": "title",
+          "label": "文章标题",
+          "widget": "string"
+        },
+        {
+          "name": "slug",
+          "label": "固定网址标识",
+          "widget": "string",
+          "pattern": [
+            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符；不能使用分类名称"
+          ],
+          "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
+        },
+        {
+          "name": "description",
+          "label": "摘要",
+          "widget": "text",
+          "required": false
+        },
+        {
+          "name": "date",
+          "label": "发布日期",
+          "widget": "datetime",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "default": "{{now}}",
+          "hint": "按北京时间解释；未来日期的文章会等到日期到达后构建发布。"
+        },
+        {
+          "name": "updated",
+          "label": "更新日期",
+          "widget": "datetime",
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "required": false
+        },
+        {
+          "name": "category",
+          "label": "分类",
+          "widget": "select",
+          "default": "tech",
+          "options": [
+            {
+              "label": "技术",
+              "value": "tech"
+            },
+            {
+              "label": "学习与思考",
+              "value": "research"
+            },
+            {
+              "label": "日常",
+              "value": "daily"
+            },
+            {
+              "label": "月记",
+              "value": "journal"
+            }
+          ]
+        },
+        {
+          "name": "tags",
+          "label": "标签",
+          "widget": "list",
+          "required": false
+        },
+        {
+          "name": "collection",
+          "label": "所属合集",
+          "widget": "string",
+          "required": false,
+          "pattern": [
+            "^[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符"
+          ],
+          "hint": "填写合集的网址标识；不属于合集时留空。"
+        },
+        {
+          "name": "order",
+          "label": "合集内顺序",
+          "widget": "number",
+          "value_type": "int",
+          "required": false,
+          "min": 0
+        },
+        {
+          "name": "lang",
+          "label": "正文语言",
+          "widget": "select",
+          "default": "zh",
+          "options": [
+            {
+              "label": "中文",
+              "value": "zh"
+            },
+            {
+              "label": "English",
+              "value": "en"
+            }
+          ]
+        },
+        {
+          "name": "draft",
+          "label": "保留为草稿",
+          "widget": "boolean",
+          "default": true,
+          "hint": "开启时不出现在公开网站。写作完成后关闭此项再保存，才会正式发布。"
+        },
+        {
+          "name": "comments",
+          "label": "允许评论",
+          "widget": "boolean",
+          "default": true
+        },
+        {
+          "name": "cover",
+          "label": "封面图片",
+          "widget": "image",
+          "required": false
+        },
+        {
+          "name": "coverAlt",
+          "label": "封面图片说明",
+          "widget": "string",
+          "required": false
+        },
+        {
+          "name": "coverCredit",
+          "label": "封面来源链接",
+          "widget": "string",
+          "required": false,
+          "pattern": [
+            "^https?://[^\\s]+$",
+            "填写完整的 HTTP 或 HTTPS 地址"
+          ]
+        },
+        {
+          "name": "body",
+          "label": "MDX 源码",
+          "widget": "text",
+          "hint": "保留 JSX 组件源码。此编辑器不渲染 MDX 交互组件；组件效果请在本地预览中检查。"
+        }
+      ]
+    },
+    {
+      "name": "pages",
+      "label": "介绍页面",
+      "files": [
+        {
+          "name": "about",
+          "label": "关于我",
+          "file": "src/content/pages/about.md",
+          "fields": [
+            {
+              "name": "body",
+              "label": "个人介绍",
+              "widget": "markdown",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "academic",
+          "label": "经历介绍",
+          "file": "src/content/pages/academic.md",
+          "fields": [
+            {
+              "name": "body",
+              "label": "经历与成果介绍",
+              "widget": "markdown",
+              "required": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "settings",
+      "label": "站点资料",
+      "files": [
+        {
+          "name": "site",
+          "label": "主页、联系方式与展示内容",
+          "file": "src/data/site.json",
+          "format": "json",
+          "fields": [
+            {
+              "name": "name",
+              "label": "公开名称",
+              "widget": "string"
+            },
+            {
+              "name": "title",
+              "label": "网站名称",
+              "widget": "string"
+            },
+            {
+              "name": "url",
+              "label": "网站根地址",
+              "widget": "string",
+              "required": false,
+              "default": "https://vys3n.github.io",
+              "hint": "更换域名时还需同步更新 GitHub Pages 和 giscus 的域名配置。"
+            },
+            {
+              "name": "description",
+              "label": "网站简介",
+              "widget": "object",
+              "required": false,
+              "fields": [
+                {
+                  "name": "zh",
+                  "label": "中文",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "en",
+                  "label": "English",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "tagline",
+              "label": "主页短句",
+              "widget": "object",
+              "required": false,
+              "fields": [
+                {
+                  "name": "zh",
+                  "label": "中文",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "en",
+                  "label": "English",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "location",
+              "label": "所在地",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "avatar",
+              "label": "主页头像",
+              "widget": "image",
+              "required": false
+            },
+            {
+              "name": "github",
+              "label": "GitHub 用户名",
+              "widget": "string",
+              "required": false,
+              "default": "VYS3N"
+            },
+            {
+              "name": "email",
+              "label": "公开联系邮箱",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "scholar",
+              "label": "学术主页链接",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "cv",
+              "label": "简历文件",
+              "widget": "file",
+              "required": false
+            },
+            {
+              "name": "startDate",
+              "label": "网站运行起始日期",
+              "widget": "datetime",
+              "type": "date",
+              "format": "YYYY-MM-DD",
+              "default": "2026-10-23"
+            },
+            {
+              "name": "sponsorUrl",
+              "label": "赞助链接或图片地址",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "education",
+              "label": "教育与经历",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "title",
+                  "label": "学校或单位",
+                  "widget": "object",
+                  "required": true,
+                  "fields": [
+                    {
+                      "name": "zh",
+                      "label": "中文",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "name": "en",
+                      "label": "English",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                },
+                {
+                  "name": "detail",
+                  "label": "经历说明",
+                  "widget": "object",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "zh",
+                      "label": "中文",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "name": "en",
+                      "label": "English",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                },
+                {
+                  "name": "start",
+                  "label": "开始时间",
+                  "widget": "string"
+                },
+                {
+                  "name": "end",
+                  "label": "结束时间",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "url",
+                  "label": "相关链接",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "interests",
+              "label": "关注方向",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "zh",
+                  "label": "中文",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "en",
+                  "label": "English",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "publications",
+              "label": "成果",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "title",
+                  "label": "标题",
+                  "widget": "string"
+                },
+                {
+                  "name": "authors",
+                  "label": "作者",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "venue",
+                  "label": "发表或展示渠道",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "year",
+                  "label": "年份",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "url",
+                  "label": "成果链接",
+                  "widget": "string",
+                  "required": false
+                },
+                {
+                  "name": "code",
+                  "label": "代码链接",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "projects",
+              "label": "项目",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "title",
+                  "label": "项目名称",
+                  "widget": "object",
+                  "required": true,
+                  "fields": [
+                    {
+                      "name": "zh",
+                      "label": "中文",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "name": "en",
+                      "label": "English",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                },
+                {
+                  "name": "description",
+                  "label": "项目介绍",
+                  "widget": "object",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "zh",
+                      "label": "中文",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "name": "en",
+                      "label": "English",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                },
+                {
+                  "name": "url",
+                  "label": "项目链接",
+                  "widget": "string"
+                },
+                {
+                  "name": "tags",
+                  "label": "标签",
+                  "widget": "list",
+                  "required": false
+                },
+                {
+                  "name": "image",
+                  "label": "展示图片",
+                  "widget": "image",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "name": "tools",
+              "label": "常用工具",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "name",
+                  "label": "名称",
+                  "widget": "string"
+                },
+                {
+                  "name": "description",
+                  "label": "用途",
+                  "widget": "object",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "zh",
+                      "label": "中文",
+                      "widget": "string",
+                      "required": false
+                    },
+                    {
+                      "name": "en",
+                      "label": "English",
+                      "widget": "string",
+                      "required": false
+                    }
+                  ]
+                },
+                {
+                  "name": "url",
+                  "label": "链接",
+                  "widget": "string"
+                }
+              ]
+            },
+            {
+              "name": "mirrors",
+              "label": "镜像站点",
+              "widget": "list",
+              "required": false,
+              "fields": [
+                {
+                  "name": "name",
+                  "label": "站名",
+                  "widget": "string"
+                },
+                {
+                  "name": "url",
+                  "label": "地址",
+                  "widget": "string"
+                }
+              ]
+            },
+            {
+              "name": "giscus",
+              "label": "评论配置",
+              "widget": "object",
+              "collapsed": true,
+              "fields": [
+                {
+                  "name": "enabled",
+                  "label": "启用评论",
+                  "widget": "boolean",
+                  "default": true
+                },
+                {
+                  "name": "repo",
+                  "label": "评论仓库",
+                  "widget": "string",
+                  "default": "VYS3N/VYS3N.github.io"
+                },
+                {
+                  "name": "repoId",
+                  "label": "仓库 ID",
+                  "widget": "string",
+                  "required": false,
+                  "hint": "安装 giscus 后，从官方配置工具取得。"
+                },
+                {
+                  "name": "category",
+                  "label": "讨论分类",
+                  "widget": "string",
+                  "default": "Announcements"
+                },
+                {
+                  "name": "categoryId",
+                  "label": "讨论分类 ID",
+                  "widget": "string",
+                  "required": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "friends",
+      "label": "友链",
+      "file": "src/data/friends.json",
+      "format": "json",
+      "fields": [
+        {
+          "name": "name",
+          "label": "站名",
+          "widget": "string"
+        },
+        {
+          "name": "url",
+          "label": "网站地址",
+          "widget": "string"
+        },
+        {
+          "name": "description",
+          "label": "简介",
+          "widget": "string",
+          "required": false
+        },
+        {
+          "name": "avatar",
+          "label": "头像地址",
+          "widget": "string",
+          "required": false
+        },
+        {
+          "name": "rss",
+          "label": "RSS 地址",
+          "widget": "string",
+          "required": false
+        }
+      ]
+    },
+    {
+      "name": "series",
+      "label": "文章合集",
+      "file": "src/data/collections.json",
+      "format": "json",
+      "identifier_field": "slug",
+      "fields": [
+        {
+          "name": "slug",
+          "label": "固定网址标识",
+          "widget": "string",
+          "pattern": [
+            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符；不能使用分类名称"
+          ],
+          "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
+        },
+        {
+          "name": "title",
+          "label": "合集名称",
+          "widget": "object",
+          "required": true,
+          "fields": [
+            {
+              "name": "zh",
+              "label": "中文",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "en",
+              "label": "English",
+              "widget": "string",
+              "required": false
+            }
+          ]
+        },
+        {
+          "name": "description",
+          "label": "合集简介",
+          "widget": "object",
+          "required": false,
+          "fields": [
+            {
+              "name": "zh",
+              "label": "中文",
+              "widget": "string",
+              "required": false
+            },
+            {
+              "name": "en",
+              "label": "English",
+              "widget": "string",
+              "required": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

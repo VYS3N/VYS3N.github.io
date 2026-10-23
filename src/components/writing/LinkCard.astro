@@ -1,6 +1,0 @@
----
-import Card from './Card.astro';
-interface Props { href: string; title: string; description?: string; image?: string; alt?: string; }
-const { href, title, description, image, alt } = Astro.props;
----
-<Card href={href} title={title} description={description} image={image} alt={alt} icon="link"><slot /></Card>

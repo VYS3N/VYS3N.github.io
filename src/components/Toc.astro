@@ -1,9 +1,0 @@
----
-import type { MarkdownHeading } from 'astro';
-import { t, type Lang } from '../lib/i18n';
-const { headings, lang } = Astro.props as { headings: MarkdownHeading[]; lang: Lang };
-const visible = headings.filter(h => h.depth > 1 && h.depth < 5);
----
-{visible.length > 0 && <aside class="toc" aria-label={t(lang, 'toc')}>
-  <details open><summary>{t(lang, 'toc')}</summary><nav><ol>{visible.map(heading => <li class={`depth-${heading.depth}`}><a data-toc-link href={`#${heading.slug}`}>{heading.text}</a></li>)}</ol></nav></details>
-</aside>}

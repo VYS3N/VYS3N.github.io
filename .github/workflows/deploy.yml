@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: '20 0 * * *'
 
 permissions:
   contents: read
@@ -20,26 +18,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the website
+      - name: Check out the public website
         uses: actions/checkout@v7
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: '24'
-          cache: npm
-      - name: Install dependencies
-        run: npm ci
-      - name: Check types and content
-        run: npm run check
-      - name: Build the static website
-        run: npm run build
       - name: Configure Pages
         uses: actions/configure-pages@v6
+      - name: Prepare the static site artifact
+        run: |
+          mkdir _site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='_site' --exclude='README.md' ./ _site/
       - name: Upload the website
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
-
+          path: _site
   deploy:
     needs: build
     runs-on: ubuntu-latest
