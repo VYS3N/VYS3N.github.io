@@ -1,6 +1,5 @@
 ---
 import '../styles/global.css';
-import '@waline/client/waline.css';
 import Icon from '../components/Icon.astro';
 import { site, categoryKeys } from '../lib/data';
 import { localized, t, url, type Lang } from '../lib/i18n';
@@ -64,7 +63,7 @@ const active = (prefix: string) => path === prefix || (prefix && path.startsWith
       </nav>
     </header>
     <main id="main" class:list={['site-width', 'main-content', { 'article-main': article }]}><slot /></main>
-    <footer class="site-footer site-width"><div class="footer-line"><p>© {new Date().getFullYear()} {site.name}<span class="footer-separator">/</span><a href={url(lang, 'terms/list')}>{t(lang, 'policy')}</a></p><div class="footer-actions"><a href={`https://github.com/${site.github}`} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="brand-github" size={19} /></a><a href="/rss.xml" aria-label={t(lang, 'rss')} title={t(lang, 'rss')}><Icon name="rss" size={18} /></a></div></div></footer>
+    <footer class="site-footer site-width"><div class="footer-line"><p>© {new Date().getFullYear()} {site.name}<span class="footer-separator">/</span><a href={url(lang, 'terms/list')}>{t(lang, 'policy')}</a><span class="footer-separator">/</span><a href="/admin/">{t(lang, 'admin')}</a></p><div class="footer-actions"><a href={`https://github.com/${site.github}`} target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Icon name="brand-github" size={19} /></a><a href="/rss.xml" aria-label={t(lang, 'rss')} title={t(lang, 'rss')}><Icon name="rss" size={18} /></a></div></div></footer>
     <button class="back-top icon-button" data-back-top type="button" aria-label={t(lang, 'backTop')} title={t(lang, 'backTop')} hidden><Icon name="arrow-up" size={20} /></button>
     <div class="toast" data-toast role="status" aria-live="polite" hidden></div>
     <dialog class="media-dialog" data-media-dialog><button type="button" class="icon-button dialog-close" data-close-dialog aria-label={t(lang, 'close')}><Icon name="x" /></button><div data-dialog-content></div></dialog>

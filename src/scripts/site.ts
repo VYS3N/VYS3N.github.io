@@ -1,3 +1,5 @@
+import './comments';
+
 const html = document.documentElement;
 const lang = html.dataset.uiLang === 'en' ? 'en' : 'zh';
 const toast = document.querySelector<HTMLElement>('[data-toast]');
@@ -145,37 +147,4 @@ if ('IntersectionObserver' in window && tocLinks.length) {
   const observer = new IntersectionObserver(entries => { for (const entry of entries) if (entry.isIntersecting) { tocLinks.forEach(link => link.removeAttribute('aria-current')); headingToLink.get(entry.target as HTMLElement)?.setAttribute('aria-current', 'location'); } }, { rootMargin: '-80px 0px -65% 0px' });
   headingToLink.forEach((_, heading) => { if (heading) observer.observe(heading); });
   if (matchMedia('(max-width: 1000px)').matches) document.querySelector<HTMLDetailsElement>('.toc details')?.removeAttribute('open');
-}
-const commentSections = document.querySelectorAll<HTMLElement>('[data-waline-server]');
-commentSections.forEach(section => {
-  const serverURL = section.dataset.walineServer; if (!serverURL) return;
-  const button = section.querySelector<HTMLButtonElement>('[data-load-comments]');
-  const status = section.querySelector<HTMLElement>('.comment-status');
-  const mount = section.querySelector<HTMLElement>('[data-comment-mount]');
-  let loading = false; let initialized = false;
-  async function loadComments() {
-    if (loading || initialized || !mount || !button || !status) return;
-    loading = true; button.disabled = true; status.textContent = section.dataset.loading || '';
-    try {
-      const check = await fetch(`${serverURL}/api/comment?path=${encodeURIComponent(section.dataset.walinePath || '/')}&pageSize=1`, { signal: AbortSignal.timeout(12000) });
-      if (!check.ok) throw new Error('Comments unavailable');
-      const { init } = await import('@waline/client');
-      const instance = init({ el: mount, serverURL: serverURL!, path: section.dataset.walinePath || '/', lang: lang === 'zh' ? 'zh-CN' : 'en', dark: 'html[data-theme="dark"]', meta: ['nick', 'mail', 'link'], requiredMeta: ['nick'], login: 'enable', pageview: false, comment: false, search: false, imageUploader: false, noCopyright: false });
-      if (!instance) throw new Error('Comments failed to initialize');
-      initialized = true; button.hidden = true; status.textContent = '';
-    } catch { status.textContent = section.dataset.error || ''; button.textContent = section.dataset.retry || 'Retry'; button.disabled = false; }
-    finally { loading = false; }
-  }
-  button?.addEventListener('click', () => void loadComments());
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); void loadComments(); } }, { rootMargin: '250px' }); observer.observe(section);
-  }
-});
-const counter = document.querySelector<HTMLElement>('[data-view-server]');
-if (counter?.dataset.viewServer) {
-  import('@waline/client').then(({ pageviewCount, commentCount }) => {
-    const options = { serverURL: counter.dataset.viewServer!, path: counter.dataset.viewPath!, lang: lang === 'zh' ? 'zh-CN' : 'en' };
-    pageviewCount({ ...options, update: true });
-    if (document.querySelector('.waline-comment-count')) commentCount(options);
-  }).catch(() => { counter.hidden = true; });
 }

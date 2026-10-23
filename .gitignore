@@ -3,6 +3,8 @@ dist/
 .astro/
 work/
 src/generated/
+public/admin/config.json
+public/admin/vendor/
 .env
 .env.*
 !.env.example

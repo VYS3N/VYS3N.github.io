@@ -13,7 +13,8 @@ const zh = {
   friends: '朋友们', applyLinks: '交换友链', friendFeed: '朋友圈', friendFeedEmpty: '还没有可显示的朋友动态。',
   copySite: '复制本站信息', copied: '已复制', copyFailed: '复制失败，请手动选择文字复制。',
   comments: '评论', commentsClosed: '评论暂未开放。', loadComments: '加载评论', commentsLoading: '正在加载评论…',
-  commentsError: '评论暂时无法加载，请稍后重试。', retry: '重试', views: '次阅读', replies: '条评论',
+  commentsError: '评论暂时无法加载，请重试或在 GitHub 中查看讨论。', retry: '重试',
+  commentsGithubHint: '使用 GitHub 登录后留言或回复。站主可在 GitHub 中管理留言。', commentsOnGithub: '在 GitHub 查看讨论', joinDiscussion: '参与讨论',
   minRead: '分钟阅读', toc: '文章目录', backTop: '回到顶部', backBlog: '返回文章列表',
   previous: '上一篇', next: '下一篇', related: '你可能还想读', inCollection: '本文所属合集',
   share: '分享', copyLink: '复制链接', qr: '二维码', qrHint: '扫码打开当前文章', close: '关闭',
@@ -26,7 +27,7 @@ const zh = {
   newer: '上一页', older: '下一页', policy: '站点说明', privacy: '隐私说明', terms: '使用说明',
   copyright: '版权说明', disclaimer: '内容说明', rss: '订阅 RSS', skip: '跳到主要内容',
   theme: '切换主题', light: '浅色', dark: '深色', system: '跟随系统', menu: '打开导航',
-  language: 'Switch to English', contact: '联系', downloadCV: '下载简历', visitProject: '查看项目',
+  language: 'Switch to English', contact: '联系', downloadCV: '下载简历', visitProject: '查看项目', admin: '站主管理',
   feedLoading: '正在读取朋友动态…', nothing: '暂无', notFound: '这一页走丢了',
   notFoundDetail: '页面可能已经移动，或者这个地址还没有内容。', backHome: '返回首页',
   policyIntro: '关于本站内容、使用方式和数据处理的说明。',
@@ -46,7 +47,8 @@ const en: Record<keyof typeof zh, string> = {
   friends: 'Friends', applyLinks: 'Exchange links', friendFeed: 'From friends', friendFeedEmpty: 'No recent posts to show yet.',
   copySite: 'Copy site details', copied: 'Copied', copyFailed: 'Could not copy. Select the text and copy it manually.',
   comments: 'Comments', commentsClosed: 'Comments are not open yet.', loadComments: 'Load comments', commentsLoading: 'Loading comments…',
-  commentsError: 'Comments are unavailable right now. Please try again later.', retry: 'Try again', views: 'views', replies: 'comments',
+  commentsError: 'Comments are unavailable. Try again or view the discussion on GitHub.', retry: 'Try again',
+  commentsGithubHint: 'Sign in with GitHub to comment or reply. The site owner can moderate comments on GitHub.', commentsOnGithub: 'View discussions on GitHub', joinDiscussion: 'Join the discussion',
   minRead: 'min read', toc: 'On this page', backTop: 'Back to top', backBlog: 'Back to posts',
   previous: 'Previous post', next: 'Next post', related: 'Keep reading', inCollection: 'Part of this collection',
   share: 'Share', copyLink: 'Copy link', qr: 'QR code', qrHint: 'Scan to open this article', close: 'Close',
@@ -59,7 +61,7 @@ const en: Record<keyof typeof zh, string> = {
   newer: 'Previous', older: 'Next', policy: 'Site policy', privacy: 'Privacy', terms: 'Terms of use',
   copyright: 'Copyright', disclaimer: 'Content notice', rss: 'Subscribe via RSS', skip: 'Skip to content',
   theme: 'Change theme', light: 'Light', dark: 'Dark', system: 'System', menu: 'Open navigation',
-  language: '切换到中文', contact: 'Contact', downloadCV: 'Download CV', visitProject: 'View project',
+  language: '切换到中文', contact: 'Contact', downloadCV: 'Download CV', visitProject: 'View project', admin: 'Site admin',
   feedLoading: 'Loading updates…', nothing: 'None yet', notFound: 'This page is missing',
   notFoundDetail: 'It may have moved, or there may not be anything at this address yet.', backHome: 'Back home',
   policyIntro: 'Notes on the content, use and data handling of this website.',
@@ -67,5 +69,5 @@ const en: Record<keyof typeof zh, string> = {
 };
 export type Message = keyof typeof zh;
 export const t = (lang: Lang, key: Message): string => (lang === 'en' ? en : zh)[key];
-export const localized = (value: string | { zh: string; en: string }, lang: Lang) => typeof value === 'string' ? value : value[lang] || value.zh || value.en;
+export const localized = (value: string | { zh?: string; en?: string } | null | undefined, lang: Lang) => typeof value === 'string' ? value : value?.[lang] || value?.zh || value?.en || '';
 export const url = (lang: Lang, path = '') => '/' + (lang === 'en' ? 'en/' : '') + (path.replace(/^\/+|\/+$/g, '') ? path.replace(/^\/+|\/+$/g, '') + '/' : '');

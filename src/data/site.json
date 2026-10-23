@@ -11,7 +11,13 @@
   "scholar": "",
   "cv": "",
   "startDate": "2026-10-23",
-  "walineServer": "",
+  "giscus": {
+    "enabled": true,
+    "repo": "VYS3N/VYS3N.github.io",
+    "repoId": "R_kgDOVUerkw",
+    "category": "Announcements",
+    "categoryId": "DIC_kwDOVUerk84DJaUr"
+  },
   "sponsorUrl": "",
   "education": [],
   "interests": [],

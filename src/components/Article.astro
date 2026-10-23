@@ -6,6 +6,7 @@ import { type Lang, t, url, localized } from '../lib/i18n';
 import Toc from './Toc.astro';
 import Icon from './Icon.astro';
 import Comments from './Comments.astro';
+import { commentsReady } from '../lib/comments';
 import PostList from './PostList.astro';
 import * as writing from './writing';
 const { post, posts, lang } = Astro.props as { post: Post; posts: Post[]; lang: Lang };
@@ -25,7 +26,7 @@ const commentPath = url('zh', 'blog/' + postSlug(post));
   <h1>{post.data.title}</h1>
   {post.data.description && <p class="article-description">{post.data.description}</p>}
   <div class="article-tags">{post.data.tags.map(tag => <a href={url(lang, 'tags/' + tagSlug(tag))}>#{tag}</a>)}</div>
-  {site.walineServer && <div class="article-counters post-meta" data-view-server={site.walineServer} data-view-path={commentPath}><span><span class="waline-pageview-count" data-path={commentPath}></span> {t(lang, 'views')}</span>{post.data.comments && <a href="#comments"><span class="waline-comment-count" data-path={commentPath}></span> {t(lang, 'replies')}</a>}</div>}
+  {commentsReady && post.data.comments && <a class="quiet-link article-discussion-link" href="#comments">{t(lang, 'joinDiscussion')}<Icon name="message-circle" size={15} /></a>}
 </header>
 {post.data.cover && <figure class="article-cover"><img src={post.data.cover} alt={post.data.coverAlt} width="1200" height="675" fetchpriority="high" />{post.data.coverCredit && <figcaption><a href={post.data.coverCredit} target="_blank" rel="noopener noreferrer">{t(lang, 'source')}<Icon name="arrow-up-right" size={13} /></a></figcaption>}</figure>}
 <div class:list={['article-grid', { 'without-toc': !headings.some(heading => heading.depth > 1 && heading.depth < 5) }]}>

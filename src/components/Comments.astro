@@ -1,11 +1,16 @@
 ---
-import { site } from '../lib/data';
+import { commentsReady, giscusConfig } from '../lib/comments';
 import { t, type Lang } from '../lib/i18n';
 interface Props { lang: Lang; path: string; enabled?: boolean; }
 const { lang, path, enabled = true } = Astro.props;
-const server = /^https:\/\//.test(site.walineServer) ? site.walineServer.replace(/\/$/, '') : '';
+const active = enabled && commentsReady;
+const discussionUrl = `https://github.com/${giscusConfig.repo}/discussions`;
 ---
-<section id="comments" class="comments-section section-block" data-waline-server={enabled ? server : ''} data-waline-path={path} data-waline-lang={lang} data-loading={t(lang, 'commentsLoading')} data-error={t(lang, 'commentsError')} data-retry={t(lang, 'retry')}>
+<section id="comments" class="comments-section section-block" data-giscus-enabled={active ? 'true' : 'false'} data-giscus-repo={active ? giscusConfig.repo : undefined} data-giscus-repo-id={active ? giscusConfig.repoId : undefined} data-giscus-category={active ? giscusConfig.category : undefined} data-giscus-category-id={active ? giscusConfig.categoryId : undefined} data-giscus-term={path} data-giscus-lang={lang === 'zh' ? 'zh-CN' : 'en'} data-loading={t(lang, 'commentsLoading')} data-error={t(lang, 'commentsError')} data-retry={t(lang, 'retry')} data-title={t(lang, 'comments')}>
   <h2>{t(lang, 'comments')}</h2>
-  {enabled && server ? <div class="comment-loader"><p class="comment-status" role="status"></p><button type="button" class="button subtle" data-load-comments>{t(lang, 'loadComments')}</button><div data-comment-mount></div></div> : <p class="muted comment-closed">{t(lang, 'commentsClosed')}</p>}
+  {active ? <>
+    <p class="muted comment-help">{t(lang, 'commentsGithubHint')}</p>
+    <div class="comment-loader"><p class="comment-status" role="status" aria-live="polite"></p><button type="button" class="button subtle" data-load-comments>{t(lang, 'loadComments')}</button><div class="giscus" data-comment-mount></div></div>
+    <a class="quiet-link comment-link" href={discussionUrl} target="_blank" rel="noopener noreferrer">{t(lang, 'commentsOnGithub')}</a>
+  </> : <p class="muted comment-closed">{t(lang, 'commentsClosed')}</p>}
 </section>

@@ -69,7 +69,7 @@ npm run new:post -- "我的文章" --slug my-article --category tech --mdx
 
 将视频放入 `public/videos/`。外部视频可以直接填写完整的 YouTube 或 Bilibili 视频页面地址；第三方播放器无法加载时，读者仍能使用原站观看链接。
 
-GitHub 卡片直接读取 GitHub 的公开 API，不需要密钥；可能受未认证访问频率或网络限制。卡片提供错误提示和重试，仓库链接始终可以访问。外部链接卡片不自动请求目标网页。Waline 仍须填写自己的服务地址。
+GitHub 卡片直接读取 GitHub 的公开 API，不需要密钥；可能受未认证访问频率或网络限制。卡片提供错误提示和重试，仓库链接始终可以访问。外部链接卡片不自动请求目标网页。评论已改用 giscus，配置方法见 [评论配置与管理](giscus-setup.md)。
 
 ## 预览
 

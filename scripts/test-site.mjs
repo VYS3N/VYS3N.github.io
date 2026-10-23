@@ -70,6 +70,7 @@ async function chooseBrowser() {
 async function basicTests() {
   const errors = [];
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: 'light', reducedMotion: 'reduce' });
+  await context.route('https://giscus.app/**', route => route.abort());
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(error.message));
   await page.goto(base, { waitUntil: 'networkidle' });
@@ -86,7 +87,11 @@ async function basicTests() {
   await screenshot(page, 'home-dark-en');
   await page.goto(base + '/search/'); await page.locator('input[type="search"]').fill('尚无内容的查询');
   await page.locator('[data-search-results] .empty-title').waitFor();
-  await page.goto(base + '/links/'); assert.equal(await page.locator('[data-waline-server]').getAttribute('data-waline-server'), ''); assert.equal(await page.locator('[data-load-comments]').count(), 0);
+  await page.goto(base + '/links/');
+  const saved = JSON.parse(await readFile('src/data/site.json', 'utf8'));
+  const configured = Boolean(saved.giscus?.enabled && saved.giscus?.repoId && saved.giscus?.categoryId);
+  assert.equal(await page.locator('[data-giscus-enabled]').getAttribute('data-giscus-enabled'), String(configured));
+  assert.equal(await page.locator('[data-load-comments]').count(), configured ? 1 : 0);
   await page.locator('[data-copy-site]').click(); await page.locator('[data-toast]:not([hidden])').waitFor();
   await screenshot(page, 'links-dark-zh');
   const missing = await page.goto(base + '/does-not-exist/'); assert.equal(missing.status(), 404); assert.match(await page.locator('main').innerText(), /404/);
@@ -97,7 +102,7 @@ async function basicTests() {
     if (width === 390) await screenshot(page, 'home-mobile-dark-zh');
   }
   assert.deepEqual(errors, [], 'Unexpected browser errors');
-  await context.close(); log('PASS empty state, themes, locale switching, mobile navigation, no page overflow, copy, comments disabled, 404');
+  await context.close(); log('PASS empty state, themes, locale switching, mobile navigation, no page overflow, copy, comment configuration state, 404');
 }
 async function addFixtures() {
   const folder = resolve('src/content/posts');
@@ -143,39 +148,68 @@ async function articleTests() {
   log('PASS 13 published posts, draft/future exclusion, RSS, pagination, tags with collisions, archives, collections, Chinese/English full-text search, search recovery and safe query rendering');
   log('PASS TOC, KaTeX, Mermaid in both themes, clipboard, QR dialog, image lightbox, article locale, mobile layout');
 }
-async function walineTests() {
+async function giscusTests() {
   const configPath = resolve('src/data/site.json');
   const original = await readFile(configPath, 'utf8');
   const config = JSON.parse(original);
-  config.walineServer = 'https://comments.invalid';
+  config.giscus = { enabled: true, repo: 'VYS3N/VYS3N.github.io', repoId: 'R_TEST_ONLY', category: 'Announcements', categoryId: 'DIC_TEST_ONLY' };
   try {
     await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');
-    await build('waline-mock');
+    await build('giscus-mock');
     const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
-    const requests = [];
-    await context.route('https://comments.invalid/**', async route => {
-      const request = route.request(); requests.push({ url: request.url(), method: request.method(), body: request.postData() });
-      const address = new URL(request.url());
-      const data = address.pathname.endsWith('/article') ? [{ time: 7 }] : address.searchParams.get('type') === 'count' ? [0] : { count: 0, page: 1, pageSize: 10, data: [], totalPages: 0 };
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ errno: 0, errmsg: '', data }) });
-    });
+    const mockClient = `const frame = document.createElement('iframe'); frame.className = 'giscus-frame'; frame.src = 'https://giscus.app/widget'; document.querySelector('.giscus').append(frame);`;
+    const mockWidget = '<!doctype html><html><body><p>GitHub comments integration test</p><script>window.addEventListener("message", event => { window.lastConfig = event.data?.giscus?.setConfig; });</script></body></html>';
+    await context.route('https://giscus.app/client.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: mockClient }));
+    await context.route('https://giscus.app/widget', route => route.fulfill({ status: 200, contentType: 'text/html', body: mockWidget }));
     const page = await context.newPage();
+    const errors = []; page.on('pageerror', error => errors.push(error.message));
     await page.goto(base + '/blog/site-test-0/', { waitUntil: 'networkidle' });
     await page.locator('#comments').scrollIntoViewIfNeeded();
-    await page.locator('#comments textarea').waitFor({ timeout: 20000 });
-    assert.equal(await page.locator('.waline-pageview-count').textContent(), '7');
-    assert.ok(requests.some(item => item.method === 'POST' && item.url.includes('/api/article')));
-    const paths = requests.filter(item => item.url.includes('/api/comment?path=')).map(item => new URL(item.url).searchParams.get('path'));
-    assert.ok(paths.includes('/blog/site-test-0/'));
-    await page.goto(base + '/en/blog/site-test-0/'); await page.locator('#comments').scrollIntoViewIfNeeded(); await page.locator('#comments textarea').waitFor();
-    assert.equal(await page.locator('#comments').getAttribute('data-waline-path'), '/blog/site-test-0/');
+    await page.locator('iframe.giscus-frame').waitFor();
+    const script = page.locator('script[data-giscus-loader]');
+    assert.equal(await script.getAttribute('data-mapping'), 'specific');
+    assert.equal(await script.getAttribute('data-term'), '/blog/site-test-0/');
+    assert.equal(await script.getAttribute('data-strict'), '1');
+    assert.equal(await script.getAttribute('data-lang'), 'zh-CN');
+    assert.equal(await page.locator('[data-view-server], .waline-pageview-count').count(), 0);
+    await page.evaluate(() => {
+      const source = document.querySelector('iframe.giscus-frame').contentWindow;
+      window.dispatchEvent(new MessageEvent('message', { origin: 'https://untrusted.invalid', source, data: { giscus: { resizeHeight: 240 } } }));
+      window.dispatchEvent(new MessageEvent('message', { origin: 'https://giscus.app', source: window, data: { giscus: { resizeHeight: 240 } } }));
+    });
+    assert.equal(await page.locator('[data-load-comments]').isDisabled(), true);
+    const widget = page.frameLocator('iframe.giscus-frame');
+    await widget.locator('body').waitFor();
+    await widget.locator('body').evaluate(() => parent.postMessage({ giscus: { resizeHeight: 240 } }, '*'));
+    await page.waitForFunction(() => document.querySelector('[data-load-comments]')?.hidden === true);
+    await page.locator('[data-theme-toggle]').click(); await page.locator('[data-theme-toggle]').click();
+    await widget.locator('body').evaluate(() => new Promise(resolve => {
+      const check = () => window.lastConfig?.theme === 'dark' ? resolve(true) : setTimeout(check, 20); check();
+    }));
+    assert.match(await page.locator('.comment-help').innerText(), /GitHub/);
+    assert.equal(await page.locator('.comment-link').getAttribute('href'), 'https://github.com/VYS3N/VYS3N.github.io/discussions');
+    await page.goto(base + '/en/blog/site-test-0/'); await page.locator('#comments').scrollIntoViewIfNeeded(); await page.locator('iframe.giscus-frame').waitFor();
+    assert.equal(await page.locator('script[data-giscus-loader]').getAttribute('data-term'), '/blog/site-test-0/');
+    assert.equal(await page.locator('script[data-giscus-loader]').getAttribute('data-lang'), 'en');
+    assert.equal(await page.locator('script[data-giscus-loader]').getAttribute('data-theme'), 'dark');
+    await page.goto(base + '/terms/privacy-policy/'); assert.match(await page.locator('main').innerText(), /GitHub Discussions/);
+    assert.deepEqual(errors, []);
     await context.close();
-    const failedContext = await browser.newContext(); await failedContext.route('https://comments.invalid/**', route => route.abort());
+    const failedContext = await browser.newContext();
+    await failedContext.route('https://giscus.app/client.js', route => route.abort());
     const failedPage = await failedContext.newPage(); await failedPage.goto(base + '/about/'); await failedPage.locator('#comments').scrollIntoViewIfNeeded();
     await failedPage.waitForFunction(() => document.querySelector('.comment-status')?.textContent?.includes('暂时无法加载'));
     assert.equal(await failedPage.locator('[data-load-comments]').isEnabled(), true);
+    await failedContext.unroute('https://giscus.app/client.js');
+    await failedContext.route('https://giscus.app/client.js', route => route.fulfill({ status: 200, contentType: 'text/javascript', body: mockClient }));
+    await failedContext.route('https://giscus.app/widget', route => route.fulfill({ status: 200, contentType: 'text/html', body: mockWidget }));
+    await failedPage.locator('[data-load-comments]').click();
+    await failedPage.frameLocator('iframe.giscus-frame').locator('body').evaluate(() => parent.postMessage({ giscus: { resizeHeight: 240 } }, '*'));
+    await failedPage.waitForFunction(() => document.querySelector('[data-load-comments]')?.hidden === true);
+    assert.equal(await failedPage.locator('iframe.giscus-frame').count(), 1);
     await failedContext.close();
-    log('PASS Waline mocked service: anonymous editor, real counter API wiring, shared bilingual comment path, unavailable-service recovery');
+    log('PASS giscus integration contract: canonical bilingual discussion, strict matching, localized widget, theme updates, message origin/source checks and failed-script retry');
+    log('NOTE GitHub authorization and moderation permissions require real account verification; mocked tests do not validate GitHub permissions');
   } finally { await writeFile(configPath, original); }
 }
 async function writingTests() {
@@ -256,7 +290,7 @@ let failure;
 try {
   await build('empty'); await serve(); browser = await chromium.launch({ executablePath: await chooseBrowser(), headless: true });
   await basicTests(); await checkInternalLinks();
-  if (!process.env.SITE_SKIP_FIXTURES) { await writingCliTests(); await addFixtures(); await build('fixtures'); await articleTests(); await writingTests(); await walineTests(); }
+  if (!process.env.SITE_SKIP_FIXTURES) { await writingCliTests(); await addFixtures(); await build('fixtures'); await articleTests(); await writingTests(); await giscusTests(); }
 } catch (error) { failure = error; console.error(error); }
 finally {
   if (browser) await browser.close(); if (server) await new Promise(accept => server.close(accept));

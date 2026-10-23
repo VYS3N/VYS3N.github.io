@@ -40,7 +40,7 @@ npm run preview
 - `avatar`：例如 `/images/avatar.jpg`；图片放入 `public/images/`。
 - `github`、`email`、`scholar`、`cv`：联系方式与简历，不填就隐藏。简历可以放在 `public/cv.pdf`。
 - `startDate`：站点运行起始日期，按北京时间计算。
-- `walineServer`：Waline 服务地址，默认空字符串。
+- `giscus`：GitHub 评论仓库、仓库 ID 与讨论分类 ID，配置方法见下文。
 - `sponsorUrl`：可选的赞助页面或收款图片路径，不填就隐藏。
 - `education`、`interests`、`publications`、`projects`、`tools`、`mirrors`：结构化资料，默认空数组。
 
@@ -124,18 +124,24 @@ git push origin main
 
 只有配置了有效 RSS 的朋友才会参与朋友圈聚合。RSS 由构建过程抓取，访客浏览器不需要跨域读取朋友的网站。只读取公开 HTTP/HTTPS 地址；抓取失败时保留清晰空状态，不生成假动态。
 
-## 开放 Waline 评论与阅读量
+## 网站内的站主后台
 
-前端接入已实现，实际评论、回复、邮件通知与计数需要独立运行的 Waline 服务。
+访问 https://vys3n.github.io/admin/ ，点击“使用访问令牌登录”。使用只授权 `VYS3N/VYS3N.github.io` 的 GitHub fine-grained personal access token，仓库权限选择 **Contents: Read and write**；Metadata 的只读权限会自动添加。本项目直接保存到 `main`，不使用 PR 审核流程。
 
-已选择使用 Vercel + Neon 部署，完整操作见 [本站 Waline 部署步骤](docs/waline-setup.md)。服务尚未创建完毕前，`walineServer` 保持为空。
+后台提供文章编辑与预览、Markdown / MDX 管理、图片上传、介绍页面、主页资料、友链、合集和评论配置。保存会提交到仓库，再由 GitHub Actions 构建发布。新文章默认保留为草稿；关闭此项并保存，且发布日期已到，文章才会显示在公开网站。公开仓库中的草稿源码仍然公开。
 
-1. 按 Waline 官方文档部署你自己的服务：https://waline.js.org/guide/get-started/
-2. 在服务端设置自己的 `SITE_NAME`、`SITE_URL` 和 `SECURE_DOMAINS`。本地测试如需放行，请同时加入本地地址。
-3. 在 `src/data/site.json` 的 `walineServer` 填写服务的 HTTPS 根地址，例如 `https://comments.example.com`，然后重新构建、推送。
-4. 如需要邮件通知、评论审核、登录限制、验证码或上传图片，请按服务端实际需要配置。默认前端允许匿名昵称评论；邮箱与网站可选，图片上传和 GIF 搜索未启用。
+令牌只在自己的后台页面输入，不写入源码。令牌创建步骤和退出方法见 [站主后台使用指南](docs/admin-guide.md)。MDX 使用源码编辑，预览不执行 JSX 组件；完整效果仍使用 `npm run dev` 查看。
 
-空地址时不会加载 Waline 服务，页面如实显示“评论暂未开放”。加载服务失败时提供重试按钮。中英文文章页共用同一条评论路径，避免语言切换后讨论被拆开。邮件凭据、数据库密码及服务端密钥只配置在 Waline 服务端，不要写入本仓库。
+## 开放 giscus 评论
+
+评论由 giscus + GitHub Discussions 提供，访客使用 GitHub 登录后留言和回复。站主通过 GitHub 仓库权限管理讨论与评论。网站后台登录与评论登录是两个独立入口。
+
+1. 仓库 Settings → General → Features 开启 **Discussions**。
+2. 安装 [giscus GitHub App](https://github.com/apps/giscus)，只授权 `VYS3N.github.io`。
+3. 在 [giscus 配置工具](https://giscus.app/zh-CN) 选择本站仓库及 **Announcements** 分类，将真实的 `repoId`、`categoryId` 填入 `src/data/site.json` 的 `giscus` 对象。
+4. 提交并推送后，检查文章页或友链页的评论框。首次有人留言时，giscus 才会创建对应讨论。
+
+缺少配置时显示“评论暂未开放”。加载失败时可以重试或使用 GitHub 讨论链接。中英文文章共用一个稳定的评论路径。`giscus.json` 限制正式站来源；更换域名时同步更新。giscus 不提供 Waline 的匿名昵称留言或阅读量统计，本站不显示虚构计数。完整说明见 [评论配置与管理](docs/giscus-setup.md)。
 
 ## 页面和功能
 
@@ -145,7 +151,8 @@ git push origin main
 - 文章目录定位、高亮、代码复制、公式、Mermaid、图片大图、阅读进度、前后文章、相关文章、链接与二维码分享。
 - 浅色、深色、跟随系统三种主题；中英文界面；响应式导航和键盘操作。
 - 朋友 RSS 聚合、RSS 订阅、sitemap、robots、社交分享 metadata 与文章结构化数据。
-- Waline 匿名评论、回复及阅读量接入。
+- giscus 登录评论、回复、表情回应，以及 GitHub Discussions 评论管理。
+- 站主可视化后台，管理 Markdown / MDX、图片、资料、友链和合集。
 - 站点说明、隐私、使用、版权和内容说明页面，以及 404 页面。
 
 站点说明是基础文案，请在填写实际资料和开启外部服务后复核其描述是否仍与站点行为一致。

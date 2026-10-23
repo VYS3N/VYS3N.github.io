@@ -4,15 +4,26 @@ import rawFriends from '../data/friends.json';
 import rawCollections from '../data/collections.json';
 import { type Lang, type Message, localized, t, url } from './i18n';
 
-type Localized = string | { zh: string; en: string };
+type Localized = string | { zh?: string; en?: string };
 export interface Project { title: Localized; description: Localized; url: string; tags?: string[]; image?: string; }
 export interface Publication { title: string; authors?: string; venue?: string; year: string | number; url?: string; code?: string; }
 export interface Education { title: Localized; detail: Localized; start: string; end?: string; url?: string; }
 export interface Friend { name: string; url: string; description: string; avatar?: string; rss?: string; }
 export interface Series { slug: string; title: Localized; description: Localized; }
-export const site = rawSite as Omit<typeof rawSite, 'projects' | 'publications' | 'education' | 'interests' | 'tools' | 'mirrors'> & {
+export interface SiteConfig {
+  name: string; title: string; url: string; description: Localized; tagline: Localized; location: string;
+  avatar: string; github: string; email: string; scholar: string; cv: string; startDate: string; sponsorUrl: string;
+  giscus: { enabled: boolean; repo: string; repoId: string; category: string; categoryId: string };
   projects: Project[]; publications: Publication[]; education: Education[]; interests: Localized[];
   tools: { name: string; description: Localized; url: string }[]; mirrors: { name: string; url: string }[];
+}
+const savedSite = rawSite as Partial<SiteConfig>;
+export const site: SiteConfig = {
+  name: 'VYS3N', title: 'VYS3N', url: 'https://vys3n.github.io', description: '', tagline: '', location: '',
+  avatar: '', github: 'VYS3N', email: '', scholar: '', cv: '', startDate: '2026-10-23', sponsorUrl: '',
+  projects: [], publications: [], education: [], interests: [], tools: [], mirrors: [],
+  ...savedSite,
+  giscus: { enabled: false, repo: 'VYS3N/VYS3N.github.io', repoId: '', category: 'Announcements', categoryId: '', ...savedSite.giscus },
 };
 export const friends = rawFriends as Friend[];
 export const configuredSeries = rawCollections as Series[];
