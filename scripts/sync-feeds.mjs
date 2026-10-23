@@ -4,7 +4,6 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 const execFileAsync = promisify(execFile);
 
-const config = JSON.parse(await readFile(new URL('../src/data/site.json', import.meta.url), 'utf8'));
 const friends = JSON.parse(await readFile(new URL('../src/data/friends.json', import.meta.url), 'utf8'));
 const generated = new URL('../src/generated/', import.meta.url);
 await mkdir(generated, { recursive: true });
@@ -34,29 +33,6 @@ async function fetchText(address) {
   if (text.length > 5_000_000) throw new Error('Response is too large');
   return text;
 }
-async function syncGithub() {
-  let data = { available: false, user: config.github, days: [], total: 0, fetchedAt: new Date().toISOString() };
-  if (config.github && /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/i.test(config.github)) {
-    try {
-      const html = await fetchText(`https://github.com/users/${config.github}/contributions`);
-      const counts = new Map();
-      for (const match of html.matchAll(/<tool-tip\b([^>]*)>([\s\S]*?)<\/tool-tip>/g)) {
-        const id = /\bfor="([^"]+)"/.exec(match[1])?.[1];
-        const count = /([\d,]+) contributions?/.exec(match[2]);
-        if (id) counts.set(id, count ? Number(count[1].replaceAll(',', '')) : 0);
-      }
-      const days = [...html.matchAll(/<td\b([^>]*\bdata-date="[^"]+"[^>]*)>/g)].map(match => {
-        const attrs = match[1];
-        const id = /\bid="([^"]+)"/.exec(attrs)?.[1];
-        return { date: /\bdata-date="([^"]+)"/.exec(attrs)?.[1], level: Number(/\bdata-level="(\d)"/.exec(attrs)?.[1] || 0), count: counts.get(id) ?? null };
-      }).filter(day => day.date).sort((a, b) => a.date.localeCompare(b.date));
-      if (!days.length) throw new Error('No contribution cells found');
-      data = { ...data, available: true, days, total: days.reduce((sum, day) => sum + (day.count || 0), 0) };
-      console.log(`GitHub: loaded ${days.length} real contribution days.`);
-    } catch (error) { console.log(`GitHub activity unavailable (${error.message}); showing a link instead.`); }
-  }
-  await writeFile(new URL('github.json', generated), JSON.stringify(data));
-}
 async function syncFriends() {
   const results = await Promise.allSettled(friends.filter(friend => friend.rss && publicUrl(friend.rss)).slice(0, 40).map(async friend => {
     const parsed = parser.parse(await fetchText(friend.rss));
@@ -74,4 +50,4 @@ async function syncFriends() {
   await writeFile(new URL('friends.json', generated), JSON.stringify({ items: unique, fetchedAt: new Date().toISOString(), failed: results.filter(result => result.status === 'rejected').length }));
   console.log(`Friend feeds: ${unique.length} posts from ${results.length} configured feeds.`);
 }
-await Promise.all([syncGithub(), syncFriends()]);
+await syncFriends();

@@ -5,7 +5,6 @@ import { t, url, localized, type Lang } from '../lib/i18n';
 import Icon from './Icon.astro';
 import Empty from './Empty.astro';
 import PostList from './PostList.astro';
-import Activity from './Activity.astro';
 const { posts, lang } = Astro.props as { posts: Post[]; lang: Lang };
 const about = await getEntry('pages', 'about');
 const aboutText = textOnly(about?.body || '');
@@ -29,4 +28,3 @@ const totalWords = posts.reduce((sum, post) => sum + wordCount(post.body), 0);
 {site.education.length > 0 && <section class="section-block"><h2>{t(lang, 'education')}</h2><div class="education-list">{site.education.map(item => <div class="education-item"><div><h3>{item.url ? <a href={item.url} target="_blank" rel="noopener noreferrer">{localized(item.title, lang)}</a> : localized(item.title, lang)}</h3><p>{localized(item.detail, lang)}</p></div><span class="muted">{item.start} {item.end && `- ${item.end}`}</span></div>)}</div></section>}
 <section class="section-block home-writing"><div class="section-heading"><h2>{t(lang, 'latest')}</h2><a class="quiet-link" href={url(lang, 'blog/all')}>{t(lang, 'readAll')}<Icon name="arrow-up-right" size={15} /></a></div>{posts.length ? <PostList posts={posts.slice(0, 3)} lang={lang} /> : <Empty title={t(lang, 'noPosts')} detail={t(lang, 'noPostsDetail')} compact />}</section>
 <section class="section-block statistics-section"><h2>{t(lang, 'statistics')}</h2><dl class="stats-grid"><div><dd data-days-online data-start-date={site.startDate}>{days}</dd><dt>{t(lang, 'days')}</dt></div><div><dd>{posts.length}</dd><dt>{t(lang, 'posts')}</dt></div><div><dd>{totalWords.toLocaleString()}</dd><dt>{t(lang, 'words')}</dt></div><div><dd class="stat-date">{lastUpdated ? formatDate(lastUpdated, lang) : t(lang, 'nothing')}</dd><dt>{t(lang, 'updated')}</dt></div></dl></section>
-<Activity lang={lang} />

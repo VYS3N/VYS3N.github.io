@@ -21,7 +21,7 @@ npm run build
 npm run preview
 ```
 
-`npm run check` 检查类型和内容结构；`build` 抓取公开 GitHub 动态与配置的朋友 RSS，再生成 `dist/`。外部接口失败不会阻止网站构建，会显示真实的不可用或空状态。
+`npm run check` 检查类型和内容结构；`build` 抓取配置的朋友 RSS，再生成 `dist/`。外部接口失败不会阻止网站构建，会显示真实的空状态。
 
 ## 第一次开启 GitHub Pages
 
@@ -29,7 +29,7 @@ npm run preview
 2. 在 Build and deployment 中把 Source 设为 **GitHub Actions**。
 3. 推送 `main`，或在 Actions → Deploy website to GitHub Pages → Run workflow 手动运行。
 
-工作流自动安装依赖、检查类型、构建并部署。每天北京时间约 08:20 也会重建，以更新 GitHub 动态、朋友圈和定时文章；GitHub 计划任务可能延迟，不能作为精确到分钟的发布机制。
+工作流自动安装依赖、检查类型、构建并部署。每天北京时间约 08:20 也会重建，以更新朋友圈和定时文章；GitHub 计划任务可能延迟，不能作为精确到分钟的发布机制。
 
 ## 修改公开资料
 
@@ -128,6 +128,8 @@ git push origin main
 
 前端接入已实现，实际评论、回复、邮件通知与计数需要独立运行的 Waline 服务。
 
+已选择使用 Vercel + Neon 部署，完整操作见 [本站 Waline 部署步骤](docs/waline-setup.md)。服务尚未创建完毕前，`walineServer` 保持为空。
+
 1. 按 Waline 官方文档部署你自己的服务：https://waline.js.org/guide/get-started/
 2. 在服务端设置自己的 `SITE_NAME`、`SITE_URL` 和 `SECURE_DOMAINS`。本地测试如需放行，请同时加入本地地址。
 3. 在 `src/data/site.json` 的 `walineServer` 填写服务的 HTTPS 根地址，例如 `https://comments.example.com`，然后重新构建、推送。
@@ -142,7 +144,7 @@ git push origin main
 - 全文搜索，支持中文和英文；可用 Ctrl/Cmd + K 打开搜索。
 - 文章目录定位、高亮、代码复制、公式、Mermaid、图片大图、阅读进度、前后文章、相关文章、链接与二维码分享。
 - 浅色、深色、跟随系统三种主题；中英文界面；响应式导航和键盘操作。
-- 真实 GitHub 贡献图、朋友 RSS 聚合、RSS 订阅、sitemap、robots、社交分享 metadata 与文章结构化数据。
+- 朋友 RSS 聚合、RSS 订阅、sitemap、robots、社交分享 metadata 与文章结构化数据。
 - Waline 匿名评论、回复及阅读量接入。
 - 站点说明、隐私、使用、版权和内容说明页面，以及 404 页面。
 
