@@ -8,11 +8,22 @@
     <title>站主管理 · VYS3N</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/admin/post-colors.css" />
+    <link rel="stylesheet" href="/admin/extensions/image-tools.css" />
     <link rel="cms-config-url" href="/admin/config.json" type="application/json" />
   </head>
   <body>
+    <!--
+      THESIS: Confirm each picture's display size while editing, before publishing.
+      OWN-WORLD: Inherit Sveltia's system typography, neutral surfaces, blue actions and compact controls.
+      STORY: Upload, choose one picture, adjust proportional dimensions, preview, confirm, then save the draft.
+      FIRST VIEWPORT: A protected editor places the image beside its controls, with reset, cancel and confirm below; mobile stacks the same controls.
+      FORM: Narrow extension of the incumbent CMS. No concept seed or replacement visual world applies.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
     <noscript>站主管理需要 JavaScript。<a href="/">返回网站</a></noscript>
+    <script type="importmap">{"imports":{"https://unpkg.com/immutable@5.1.9/dist/immutable.es.js":"/admin/vendor/immutable.es.js"}}</script>
     <script src="/admin/vendor/sveltia-cms.js"></script>
+    <script src="/admin/extensions/image-tools.js"></script>
     <script src="/admin/post-colors.js"></script>
   </body>
 </html>

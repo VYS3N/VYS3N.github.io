@@ -160,6 +160,13 @@
           "required": false
         },
         {
+          "name": "coverSize",
+          "label": "图片显示尺寸",
+          "widget": "image_size",
+          "source_field": "cover",
+          "required": false
+        },
+        {
           "name": "coverAlt",
           "label": "封面图片说明",
           "widget": "string",
@@ -174,6 +181,12 @@
             "^https?://[^\\s]+$",
             "填写完整的 HTTP 或 HTTPS 地址"
           ]
+        },
+        {
+          "name": "_imageTools",
+          "label": "正文图片",
+          "widget": "image_tools",
+          "required": false
         },
         {
           "name": "body",
@@ -318,6 +331,13 @@
           "required": false
         },
         {
+          "name": "coverSize",
+          "label": "图片显示尺寸",
+          "widget": "image_size",
+          "source_field": "cover",
+          "required": false
+        },
+        {
           "name": "coverAlt",
           "label": "封面图片说明",
           "widget": "string",
@@ -332,6 +352,12 @@
             "^https?://[^\\s]+$",
             "填写完整的 HTTP 或 HTTPS 地址"
           ]
+        },
+        {
+          "name": "_imageTools",
+          "label": "正文图片",
+          "widget": "image_tools",
+          "required": false
         },
         {
           "name": "body",
@@ -351,6 +377,12 @@
           "file": "src/content/pages/about.md",
           "fields": [
             {
+              "name": "_imageTools",
+              "label": "正文图片",
+              "widget": "image_tools",
+              "required": false
+            },
+            {
               "name": "body",
               "label": "个人介绍",
               "widget": "markdown",
@@ -363,6 +395,12 @@
           "label": "经历介绍",
           "file": "src/content/pages/academic.md",
           "fields": [
+            {
+              "name": "_imageTools",
+              "label": "正文图片",
+              "widget": "image_tools",
+              "required": false
+            },
             {
               "name": "body",
               "label": "经历与成果介绍",
@@ -681,6 +719,13 @@
                   "name": "image",
                   "label": "展示图片",
                   "widget": "image",
+                  "required": false
+                },
+                {
+                  "name": "imageSize",
+                  "label": "图片显示尺寸",
+                  "widget": "image_size",
+                  "source_field": "image",
                   "required": false
                 }
               ]
