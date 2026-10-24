@@ -13,6 +13,16 @@
   "media_folder": "content/media",
   "public_folder": "/media",
   "media_libraries": {
+    "default": {
+      "config": {
+        "transformations": {
+          "raster_image": {
+            "format": "webp",
+            "quality": 85
+          }
+        }
+      }
+    },
     "stock_assets": {
       "providers": [
         "pixabay",
@@ -882,10 +892,16 @@
               "choose_url": false,
               "media_libraries": {
                 "all": {
-                  "max_file_size": 5242880
+                  "max_file_size": 5242880,
+                  "transformations": {
+                    "raster_image": {
+                      "format": "webp",
+                      "quality": 85
+                    }
+                  }
                 }
               },
-              "hint": "仅支持 JPG、PNG、WebP；单张不超过 5 MB。上传失败时会保留原封面。"
+              "hint": "仅支持 JPG、PNG、WebP；单张不超过 5 MB。JPG、PNG 等位图会在保存时自动转换为 WebP；上传失败时会保留原封面。"
             },
             {
               "name": "recommendation",
