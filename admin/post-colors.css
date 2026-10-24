@@ -1,0 +1,10 @@
+/* Give Sveltia's no-cover placeholders a stable, readable color per article. */
+#entry-list .grid-cell.image.vys3n-post-placeholder::before {
+  background: hsl(var(--vys3n-post-hue) 70% 48%);
+}
+
+@media (prefers-color-scheme: dark) {
+  #entry-list .grid-cell.image.vys3n-post-placeholder::before {
+    background: hsl(var(--vys3n-post-hue) 72% 62%);
+  }
+}
