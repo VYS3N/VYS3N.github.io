@@ -1,0 +1,31 @@
+/* Adapt Sveltia's surfaces to the shared site palette, including its runtime CSS. */
+:root[data-site-admin] {
+  --sui-background-color-1-hsl: var(--canvas-hsl) !important;
+  --sui-background-color-2-hsl: var(--canvas-hsl) !important;
+  --sui-background-color-3-hsl: var(--canvas-hsl) !important;
+  --sui-background-color-4-hsl: var(--canvas-hsl) !important;
+  --sui-background-color-5-hsl: var(--hover-hsl) !important;
+  --sui-content-background-color: var(--bg) !important;
+  --sui-primary-background-color: var(--bg) !important;
+  --sui-secondary-background-color: var(--bg) !important;
+  --sui-tertiary-background-color: var(--bg) !important;
+  --sui-primary-background-color-translucent: var(--bg) !important;
+  --sui-secondary-background-color-translucent: var(--bg) !important;
+  --sui-tertiary-background-color-translucent: var(--bg) !important;
+  --sui-highlight-foreground-color: var(--ink) !important;
+  --sui-primary-foreground-color: var(--text) !important;
+  --sui-secondary-foreground-color: var(--muted) !important;
+  --sui-tertiary-foreground-color: var(--muted) !important;
+  --sui-primary-border-color: var(--line-strong) !important;
+  --sui-secondary-border-color: var(--line) !important;
+  --sui-control-border-color: var(--line-strong) !important;
+  --sui-textbox-border-color: var(--line-strong) !important;
+  --sui-primary-accent-color: var(--accent) !important;
+  --sui-primary-accent-color-text: var(--accent) !important;
+  --sui-primary-accent-color-inverted: var(--surface) !important;
+  --sui-focus-ring-color: var(--focus) !important;
+}
+
+/* Transparent-image previews use the page canvas, without checkerboards or blur. */
+html[data-site-admin] .preview .blur { display: none; }
+html[data-site-admin] .preview img { background-color: var(--bg); background-image: none; }

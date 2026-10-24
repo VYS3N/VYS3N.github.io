@@ -1,0 +1,38 @@
+/* Shared by every public page and the owner dashboard. Both canvases are solid colors. */
+:root {
+  color-scheme: only light;
+  --bg: #FFFFFF;
+  --surface: var(--bg);
+  --subtle: #f3f4f6;
+  --ink: #22252c;
+  --text: #4b515d;
+  --muted: #626871;
+  --line: #e2e5e9;
+  --line-strong: #9098a4;
+  --accent: #334f7f;
+  --accent-rgb: 51 79 127;
+  --accent-soft: #e9eef6;
+  --focus: #365f9d;
+  --canvas-hsl: 0 0% 100%;
+  --hover-hsl: 220 12% 90%;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: only dark;
+  --bg: #18191c;
+  --surface: var(--bg);
+  --subtle: #272a30;
+  --ink: #e6e8ed;
+  --text: #c0c5ce;
+  --muted: #a1a8b4;
+  --line: #353941;
+  --line-strong: #727c8e;
+  --accent: #9bb8e8;
+  --accent-rgb: 155 184 232;
+  --accent-soft: #28364b;
+  --focus: #b5cef5;
+  --canvas-hsl: 225 7.6923% 10.1961%;
+  --hover-hsl: 220 12% 30%;
+}
+
+html, body { background-color: var(--bg); color: var(--text); }

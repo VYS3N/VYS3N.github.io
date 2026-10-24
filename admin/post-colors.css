@@ -10,8 +10,6 @@
   background: hsl(var(--vys3n-post-hue) 70% 48%) !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  #entry-list .grid-cell.image.vys3n-post-placeholder::before {
-    background: hsl(var(--vys3n-post-hue) 72% 62%) !important;
-  }
+html[data-theme="dark"] #entry-list .grid-cell.image.vys3n-post-placeholder::before {
+  background: hsl(var(--vys3n-post-hue) 68% 65%) !important;
 }
