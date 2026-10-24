@@ -60,12 +60,14 @@
         },
         {
           "name": "date",
-          "label": "发布日期",
+          "label": "发布时间",
           "widget": "datetime",
-          "type": "date",
-          "format": "YYYY-MM-DD",
+          "type": "datetime-local",
+          "format": "YYYY-MM-DDTHH:mm:ssZ",
+          "input_timezone": "Asia/Shanghai",
+          "output_utc": false,
           "default": "{{now}}",
-          "hint": "按北京时间解释；未来日期的文章会等到日期到达后构建发布。"
+          "hint": "按北京时间填写日期和时分；首页按此时间从新到旧排列，同一天也会按时间排序。未来时间的文章会等到时间到达后构建发布。"
         },
         {
           "name": "updated",
@@ -231,12 +233,14 @@
         },
         {
           "name": "date",
-          "label": "发布日期",
+          "label": "发布时间",
           "widget": "datetime",
-          "type": "date",
-          "format": "YYYY-MM-DD",
+          "type": "datetime-local",
+          "format": "YYYY-MM-DDTHH:mm:ssZ",
+          "input_timezone": "Asia/Shanghai",
+          "output_utc": false,
           "default": "{{now}}",
-          "hint": "按北京时间解释；未来日期的文章会等到日期到达后构建发布。"
+          "hint": "按北京时间填写日期和时分；首页按此时间从新到旧排列，同一天也会按时间排序。未来时间的文章会等到时间到达后构建发布。"
         },
         {
           "name": "updated",
