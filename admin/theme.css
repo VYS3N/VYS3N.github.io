@@ -29,3 +29,29 @@
 /* Transparent-image previews use the page canvas, without checkerboards or blur. */
 html[data-site-admin] .preview .blur { display: none; }
 html[data-site-admin] .preview img { background-color: var(--bg); background-image: none; }
+
+/* Keep the native CMS panes, media picker and dialogs responsive. These are
+   public Sveltia UI tokens and semantic selectors, rather than build hashes. */
+html[data-site-admin] { --admin-edge: max(12px, env(safe-area-inset-left), env(safe-area-inset-right)); -webkit-text-size-adjust:100%; }
+html[data-site-admin] :is(input,textarea,select,[contenteditable="true"]) { scroll-margin-block:64px; }
+html[data-site-admin] :is(button,a,input,textarea,select,[tabindex]):focus-visible { outline-offset:3px; }
+html[data-site-admin] dialog.sui.dialog > .content { max-width:calc(100dvw - var(--admin-edge) * 2); max-height:calc(var(--visual-height,100dvh) - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+html[data-site-admin] dialog.sui.dialog :is(.header,.footer) { flex-shrink:0; }
+html[data-site-admin] dialog.sui.dialog .body { min-height:0; overscroll-behavior:contain; }
+html[data-site-admin] [role="document"] { min-width:0; overflow-wrap:anywhere; }
+html[data-site-admin] [role="document"] :is(img,video,svg) { max-width:100%; }
+html[data-site-admin] [role="document"] img { height:auto; }
+@media (pointer:coarse), (max-width:900px) {
+  :root[data-site-admin] {
+    --sui-button-small-height:44px;
+    --sui-button-medium-height:44px;
+    --sui-button-large-height:48px;
+    --sui-textbox-height:44px;
+    --sui-textbox-font-size:16px;
+    --sui-textbox-singleline-min-width:0;
+  }
+  html[data-site-admin] :is(input:not([type="checkbox"]):not([type="radio"]),textarea,select,[contenteditable="true"]) { font-size:16px; }
+  html[data-site-admin] .sui.button { min-width:44px; }
+  html[data-site-admin] dialog.sui.dialog .header { height:auto; min-height:44px; }
+  html[data-site-admin] dialog.sui.dialog .footer { flex-wrap:wrap; }
+}

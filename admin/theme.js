@@ -2,6 +2,14 @@
   const root = document.documentElement;
   const key = 'vys3n-theme';
   const prefsKey = 'sveltia-cms.prefs';
+  const updateViewport = () => {
+    const viewport = window.visualViewport;
+    if (viewport && Math.abs(viewport.scale - 1) > .05) return;
+    root.style.setProperty('--visual-height', `${viewport?.height || innerHeight}px`);
+  };
+  window.visualViewport?.addEventListener('resize', updateViewport);
+  window.addEventListener('resize', updateViewport);
+  updateViewport();
   const valid = value => ['light', 'dark', 'system'].includes(value);
   let preference = 'light';
   try {
