@@ -12,6 +12,14 @@
   "logo_url": "/favicon.svg",
   "media_folder": "content/media",
   "public_folder": "/media",
+  "media_libraries": {
+    "stock_assets": {
+      "providers": [
+        "pixabay",
+        "unsplash"
+      ]
+    }
+  },
   "output": {
     "omit_empty_optional_fields": true
   },
