@@ -103,10 +103,10 @@
           "widget": "string",
           "required": false,
           "pattern": [
-            "^[a-z0-9][a-z0-9-]*$",
-            "使用小写英文字母、数字和连字符"
+            "^(?!all$|tech$|research$|daily$|journal$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
+            "支持中文、英文字母、数字和连字符；不能使用空格或斜线"
           ],
-          "hint": "填写合集的网址标识；不属于合集时留空。"
+          "hint": "填写合集的网址标识；支持中文，例如 我的系列；不属于合集时留空。"
         },
         {
           "name": "order",
@@ -261,10 +261,10 @@
           "widget": "string",
           "required": false,
           "pattern": [
-            "^[a-z0-9][a-z0-9-]*$",
-            "使用小写英文字母、数字和连字符"
+            "^(?!all$|tech$|research$|daily$|journal$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
+            "支持中文、英文字母、数字和连字符；不能使用空格或斜线"
           ],
-          "hint": "填写合集的网址标识；不属于合集时留空。"
+          "hint": "填写合集的网址标识；支持中文，例如 我的系列；不属于合集时留空。"
         },
         {
           "name": "order",
@@ -824,10 +824,10 @@
           "label": "固定网址标识",
           "widget": "string",
           "pattern": [
-            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
-            "使用小写英文字母、数字和连字符；不能使用分类名称"
+            "^(?!(all|tech|research|daily|journal)$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
+            "使用中文、英文字母、数字和连字符；不能使用分类名称"
           ],
-          "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
+          "hint": "例如 我的系列 或 first-post。发布后请保持不变。"
         },
         {
           "name": "title",
