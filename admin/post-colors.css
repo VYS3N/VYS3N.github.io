@@ -1,5 +1,9 @@
 /* Give Sveltia's no-cover placeholders a stable, readable color per article. */
 #entry-list .grid-cell.image.vys3n-post-placeholder::before {
+  width: 12px;
+  height: 12px;
+  margin: auto;
+  border-radius: 50%;
   background: hsl(var(--vys3n-post-hue) 70% 48%);
 }
 
