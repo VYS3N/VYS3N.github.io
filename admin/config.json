@@ -9,7 +9,7 @@
   },
   "site_url": "https://vys3n.github.io",
   "display_url": "https://vys3n.github.io",
-  "logo_url": "/favicon.svg",
+  "logo_url": "/favicon.ico",
   "media_folder": "content/media",
   "public_folder": "/media",
   "media_libraries": {
