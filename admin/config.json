@@ -178,6 +178,12 @@
           ]
         },
         {
+          "name": "_paragraphTools",
+          "label": "正文排版",
+          "widget": "paragraph_tools",
+          "required": false
+        },
+        {
           "name": "_imageTools",
           "label": "正文图片",
           "widget": "image_tools",
@@ -357,6 +363,12 @@
           "file": "src/content/pages/about.md",
           "fields": [
             {
+              "name": "_paragraphTools",
+              "label": "正文排版",
+              "widget": "paragraph_tools",
+              "required": false
+            },
+            {
               "name": "_imageTools",
               "label": "正文图片",
               "widget": "image_tools",
@@ -375,6 +387,12 @@
           "label": "经历介绍",
           "file": "src/content/pages/academic.md",
           "fields": [
+            {
+              "name": "_paragraphTools",
+              "label": "正文排版",
+              "widget": "paragraph_tools",
+              "required": false
+            },
             {
               "name": "_imageTools",
               "label": "正文图片",
