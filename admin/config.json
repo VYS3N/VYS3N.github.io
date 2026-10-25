@@ -830,76 +830,103 @@
     {
       "name": "song",
       "label": "音乐推荐管理",
-      "files": [
+      "folder": "src/data/songs",
+      "extension": "json",
+      "format": "json",
+      "create": true,
+      "delete": true,
+      "duplicate": true,
+      "identifier_field": "title",
+      "slug": "{{slug}}",
+      "summary": "{{title}} · {{artist}}",
+      "table_columns": [
+        "title",
+        "artist",
+        "enabled"
+      ],
+      "sortable_fields": [
+        "title",
+        "artist",
+        "enabled"
+      ],
+      "fields": [
         {
-          "name": "song",
-          "label": "Song of the Moment",
-          "file": "src/data/song.json",
-          "format": "json",
-          "preview_path": "/",
-          "fields": [
-            {
-              "name": "title",
-              "label": "歌曲名称",
-              "widget": "string",
-              "required": true,
-              "hint": "必填；前台标题固定为 Song of the Moment。"
-            },
-            {
-              "name": "artist",
-              "label": "歌手名称",
-              "widget": "string",
-              "required": true
-            },
-            {
-              "name": "album",
-              "label": "专辑名称",
-              "widget": "string",
-              "required": false
-            },
-            {
-              "name": "releaseDate",
-              "label": "发行时间",
-              "widget": "string",
-              "required": false,
-              "pattern": [
-                "^(?:\\d{4}(?:-\\d{2}-\\d{2})?)?$",
-                "请输入年份（YYYY）或完整日期（YYYY-MM-DD）。"
-              ]
-            },
-            {
-              "name": "cover",
-              "label": "专辑封面",
-              "widget": "image",
-              "required": false,
-              "accept": "image/jpeg,image/png,image/webp",
-              "choose_url": false,
-              "media_libraries": {
-                "all": {
-                  "max_file_size": 5242880,
-                  "transformations": {
-                    "raster_image": {
-                      "format": "webp",
-                      "quality": 85
-                    }
-                  }
-                }
-              },
-              "hint": "仅支持 JPG、PNG、WebP；单张不超过 5 MB。JPG、PNG 等位图会在保存时自动转换为 WebP；上传失败时会保留原封面。"
-            },
-            {
-              "name": "recommendation",
-              "label": "推荐语",
-              "widget": "text",
-              "required": false
-            },
-            {
-              "name": "_songPreview",
-              "label": "实时预览",
-              "widget": "song_preview",
-              "required": false
-            }
+          "name": "slug",
+          "label": "歌曲固定标识",
+          "widget": "string",
+          "pattern": [
+            "^[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符"
+          ],
+          "hint": "用于歌曲库文件名；创建后尽量保持不变。"
+        },
+        {
+          "name": "title",
+          "label": "歌曲名称",
+          "widget": "string",
+          "required": true,
+          "hint": "必填；前台标题固定为 Song of the Moment。"
+        },
+        {
+          "name": "artist",
+          "label": "歌手名称",
+          "widget": "string",
+          "required": true
+        },
+        {
+          "name": "enabled",
+          "label": "启用歌曲",
+          "widget": "boolean",
+          "default": true,
+          "hint": "关闭后保留在歌曲库中，但不会进入前台随机池。"
+        },
+        {
+          "name": "album",
+          "label": "专辑名称",
+          "widget": "string",
+          "required": false
+        },
+        {
+          "name": "releaseDate",
+          "label": "发行时间",
+          "widget": "string",
+          "required": false,
+          "pattern": [
+            "^(?:\\d{4}(?:-\\d{2}-\\d{2})?)?$",
+            "请输入年份（YYYY）或完整日期（YYYY-MM-DD）。"
           ]
+        },
+        {
+          "name": "cover",
+          "label": "专辑封面",
+          "widget": "image",
+          "required": false,
+          "accept": "image/jpeg,image/png,image/webp",
+          "choose_url": false,
+          "media_libraries": {
+            "all": {
+              "max_file_size": 5242880,
+              "transformations": {
+                "raster_image": {
+                  "format": "webp",
+                  "quality": 85
+                }
+              }
+            }
+          },
+          "hint": "仅支持 JPG、PNG、WebP；单张不超过 5 MB。JPG、PNG 等位图会在保存时自动转换为 WebP；上传失败时会保留原封面。"
+        },
+        {
+          "name": "recommendation",
+          "label": "推荐语",
+          "widget": "text",
+          "required": false
+        },
+        {
+          "name": "_songPreview",
+          "label": "实时预览",
+          "widget": "song_preview",
+          "required": false
         }
       ]
     },
