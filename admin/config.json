@@ -57,8 +57,8 @@
           "label": "固定网址标识",
           "widget": "string",
           "pattern": [
-            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
-            "使用小写英文字母、数字和连字符；不能使用分类名称"
+            "^(?!all$)[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符；不能使用 all"
           ],
           "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
         },
@@ -88,30 +88,6 @@
           "required": false
         },
         {
-          "name": "category",
-          "label": "分类",
-          "widget": "select",
-          "default": "tech",
-          "options": [
-            {
-              "label": "技术",
-              "value": "tech"
-            },
-            {
-              "label": "学习与思考",
-              "value": "research"
-            },
-            {
-              "label": "日常",
-              "value": "daily"
-            },
-            {
-              "label": "月记",
-              "value": "journal"
-            }
-          ]
-        },
-        {
           "name": "tags",
           "label": "标签",
           "widget": "list",
@@ -120,13 +96,20 @@
         {
           "name": "collection",
           "label": "所属合集",
-          "widget": "string",
-          "required": false,
-          "pattern": [
-            "^(?!all$|tech$|research$|daily$|journal$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
-            "支持中文、英文字母、数字和连字符；不能使用空格或斜线"
+          "widget": "relation",
+          "collection": "series",
+          "value_field": "slug",
+          "display_fields": [
+            "title.zh"
           ],
-          "hint": "填写合集的网址标识；支持中文，例如 我的系列；不属于合集时留空。"
+          "search_fields": [
+            "title.zh",
+            "title.en",
+            "slug"
+          ],
+          "required": false,
+          "multiple": false,
+          "hint": "从站长创建的合集中选择；留空表示不加入合集。合集列表保存后会自动更新此选项。"
         },
         {
           "name": "order",
@@ -230,8 +213,8 @@
           "label": "固定网址标识",
           "widget": "string",
           "pattern": [
-            "^(?!(all|tech|research|daily|journal)$)[a-z0-9][a-z0-9-]*$",
-            "使用小写英文字母、数字和连字符；不能使用分类名称"
+            "^(?!all$)[a-z0-9][a-z0-9-]*$",
+            "使用小写英文字母、数字和连字符；不能使用 all"
           ],
           "hint": "例如 first-post。发布后请保持不变。Markdown 和 MDX 文章也不能使用相同标识。"
         },
@@ -261,30 +244,6 @@
           "required": false
         },
         {
-          "name": "category",
-          "label": "分类",
-          "widget": "select",
-          "default": "tech",
-          "options": [
-            {
-              "label": "技术",
-              "value": "tech"
-            },
-            {
-              "label": "学习与思考",
-              "value": "research"
-            },
-            {
-              "label": "日常",
-              "value": "daily"
-            },
-            {
-              "label": "月记",
-              "value": "journal"
-            }
-          ]
-        },
-        {
           "name": "tags",
           "label": "标签",
           "widget": "list",
@@ -293,13 +252,20 @@
         {
           "name": "collection",
           "label": "所属合集",
-          "widget": "string",
-          "required": false,
-          "pattern": [
-            "^(?!all$|tech$|research$|daily$|journal$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
-            "支持中文、英文字母、数字和连字符；不能使用空格或斜线"
+          "widget": "relation",
+          "collection": "series",
+          "value_field": "slug",
+          "display_fields": [
+            "title.zh"
           ],
-          "hint": "填写合集的网址标识；支持中文，例如 我的系列；不属于合集时留空。"
+          "search_fields": [
+            "title.zh",
+            "title.en",
+            "slug"
+          ],
+          "required": false,
+          "multiple": false,
+          "hint": "从站长创建的合集中选择；留空表示不加入合集。合集列表保存后会自动更新此选项。"
         },
         {
           "name": "order",
@@ -960,6 +926,11 @@
       "label": "文章合集",
       "file": "src/data/collections.json",
       "format": "json",
+      "table_columns": [
+        "slug",
+        "title.zh",
+        "title.en"
+      ],
       "identifier_field": "slug",
       "fields": [
         {
@@ -967,8 +938,8 @@
           "label": "固定网址标识",
           "widget": "string",
           "pattern": [
-            "^(?!(all|tech|research|daily|journal)$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
-            "使用中文、英文字母、数字和连字符；不能使用分类名称"
+            "^(?!all$)[A-Za-z0-9㐀-䶿一-鿿][A-Za-z0-9㐀-䶿一-鿿-]*$",
+            "使用中文、英文字母、数字和连字符；不能使用 all"
           ],
           "hint": "例如 我的系列 或 first-post。发布后请保持不变。"
         },
