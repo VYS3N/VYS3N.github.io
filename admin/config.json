@@ -865,7 +865,7 @@
           "label": "歌曲名称",
           "widget": "string",
           "required": true,
-          "hint": "必填；前台标题固定为 Song of the Moment。"
+          "hint": "必填；前台标题固定为 Song of the Moment。歌曲名称与歌手名称的组合不能重复。"
         },
         {
           "name": "artist",
