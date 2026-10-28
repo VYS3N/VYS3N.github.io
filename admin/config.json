@@ -198,7 +198,11 @@
         {
           "name": "body",
           "label": "正文",
-          "widget": "markdown"
+          "widget": "markdown",
+          "modes": [
+            "raw",
+            "rich_text"
+          ]
         }
       ]
     },
@@ -390,6 +394,10 @@
               "name": "body",
               "label": "个人介绍",
               "widget": "markdown",
+              "modes": [
+                "raw",
+                "rich_text"
+              ],
               "required": false
             }
           ]
@@ -421,6 +429,10 @@
               "name": "body",
               "label": "经历与成果介绍",
               "widget": "markdown",
+              "modes": [
+                "raw",
+                "rich_text"
+              ],
               "required": false
             }
           ]
