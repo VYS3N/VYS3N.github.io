@@ -8,3 +8,5 @@
 /* VYS3N: keep the public discussion visible while the comment composer is closed. */
 .gsc-comment-box,
 .gsc-reply-box { display: none !important; }
+/* VYS3N: hide provider branding inside the embedded discussion. */
+.gsc-header em { display: none !important; }
