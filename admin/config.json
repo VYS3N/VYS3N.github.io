@@ -178,6 +178,12 @@
           ]
         },
         {
+          "name": "_markdownImport",
+          "label": "导入文档",
+          "widget": "markdown_import",
+          "required": false
+        },
+        {
           "name": "_paragraphTools",
           "label": "正文排版",
           "widget": "paragraph_tools",
@@ -363,6 +369,12 @@
           "file": "src/content/pages/about.md",
           "fields": [
             {
+              "name": "_markdownImport",
+              "label": "导入文档",
+              "widget": "markdown_import",
+              "required": false
+            },
+            {
               "name": "_paragraphTools",
               "label": "正文排版",
               "widget": "paragraph_tools",
@@ -387,6 +399,12 @@
           "label": "经历介绍",
           "file": "src/content/pages/academic.md",
           "fields": [
+            {
+              "name": "_markdownImport",
+              "label": "导入文档",
+              "widget": "markdown_import",
+              "required": false
+            },
             {
               "name": "_paragraphTools",
               "label": "正文排版",
