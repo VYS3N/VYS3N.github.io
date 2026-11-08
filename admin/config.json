@@ -46,6 +46,16 @@
       "slug": "{{slug}}",
       "preview_path": "blog/{{slug}}/",
       "summary": "{{title}} · {{date}}",
+      "sortable_fields": {
+        "fields": [
+          "title",
+          "date"
+        ],
+        "default": {
+          "field": "date",
+          "direction": "descending"
+        }
+      },
       "fields": [
         {
           "name": "title",
@@ -218,6 +228,16 @@
       "slug": "{{slug}}",
       "preview_path": "blog/{{slug}}/",
       "summary": "{{title}} · {{date}}",
+      "sortable_fields": {
+        "fields": [
+          "title",
+          "date"
+        ],
+        "default": {
+          "field": "date",
+          "direction": "descending"
+        }
+      },
       "fields": [
         {
           "name": "title",
