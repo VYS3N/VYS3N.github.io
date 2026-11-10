@@ -29,7 +29,9 @@
 
   const sync = () => {
     const effective = root.dataset.theme === 'dark' ? 'dark' : 'light';
-    document.querySelector('meta[name="theme-color"]').content = effective === 'dark' ? '#18191c' : '#FFFFFF';
+    window.Vys3nThemeColors?.applyAccent(window.Vys3nThemeColors.readAccent(), effective);
+    const canvas = getComputedStyle(root).getPropertyValue('--bg').trim() || (effective === 'dark' ? '#121212' : '#ffffff');
+    document.querySelector('meta[name="theme-color"]').content = canvas;
     try { localStorage.setItem(key, root.dataset.autoTheming === 'true' ? 'system' : effective); }
     catch { /* Storage is optional. */ }
   };
