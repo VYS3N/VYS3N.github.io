@@ -3910,6 +3910,121 @@
     "artist": "Slatt Zy"
   },
   {
+    "path": "src/data/songs/song-0784.json",
+    "title": "胆小鬼",
+    "artist": "梁咏琪"
+  },
+  {
+    "path": "src/data/songs/song-0785.json",
+    "title": "兜圈",
+    "artist": "徐可盈"
+  },
+  {
+    "path": "src/data/songs/song-0786.json",
+    "title": "那天下雨了",
+    "artist": "网络AI"
+  },
+  {
+    "path": "src/data/songs/song-0787.json",
+    "title": "Just So You Know",
+    "artist": "Jesse McCartney"
+  },
+  {
+    "path": "src/data/songs/song-0788.json",
+    "title": "向左转向右转",
+    "artist": "梁静茹"
+  },
+  {
+    "path": "src/data/songs/song-0789.json",
+    "title": "No Broke Boys",
+    "artist": "Tinashe"
+  },
+  {
+    "path": "src/data/songs/song-0790.json",
+    "title": "I Wanted You",
+    "artist": "Ina Wroldsen"
+  },
+  {
+    "path": "src/data/songs/song-0791.json",
+    "title": "开始放手",
+    "artist": "黄淑惠"
+  },
+  {
+    "path": "src/data/songs/song-0792.json",
+    "title": "最最",
+    "artist": "梁文音"
+  },
+  {
+    "path": "src/data/songs/song-0793.json",
+    "title": "Turn Me On Seasons' End",
+    "artist": "FLY COAST / 二宮愛 (にのみや あい)"
+  },
+  {
+    "path": "src/data/songs/song-0794.json",
+    "title": "时间开的玩笑",
+    "artist": "连诗雅"
+  },
+  {
+    "path": "src/data/songs/song-0795.json",
+    "title": "眼泪情书",
+    "artist": "陈默之"
+  },
+  {
+    "path": "src/data/songs/song-0796.json",
+    "title": "Destiny",
+    "artist": "NEFFEX"
+  },
+  {
+    "path": "src/data/songs/song-0797.json",
+    "title": "Reminder",
+    "artist": "The Weeknd"
+  },
+  {
+    "path": "src/data/songs/song-0798.json",
+    "title": "说你爱我",
+    "artist": "S.H.E"
+  },
+  {
+    "path": "src/data/songs/song-0799.json",
+    "title": "无可取代",
+    "artist": "S.H.E"
+  },
+  {
+    "path": "src/data/songs/song-0800.json",
+    "title": "橘子汽水",
+    "artist": "南拳妈妈"
+  },
+  {
+    "path": "src/data/songs/song-0801.json",
+    "title": "Me, Myself & I",
+    "artist": "G-Eazy / Bebe Rexha"
+  },
+  {
+    "path": "src/data/songs/song-0802.json",
+    "title": "To Live & Die In L.A.",
+    "artist": "2Pac"
+  },
+  {
+    "path": "src/data/songs/song-0803.json",
+    "title": "Run Tha Streetz",
+    "artist": "2Pac / Storm / Mutah / Michel'le"
+  },
+  {
+    "path": "src/data/songs/song-0804.json",
+    "title": "Hate Me",
+    "artist": "Ellie Goulding / Juice WRLD"
+  },
+  {
+    "path": "src/data/songs/song-0805.json",
+    "title": "Wonder",
+    "artist": "Jay Prince"
+  },
+  {
+    "path": "src/data/songs/song-0806.json",
+    "title": "RAINY DAYS",
+    "artist": "Jay Prince"
+  },
+  {
     "path": "src/data/songs/young-wild-free.json",
     "title": "Young, Wild & Free (feat. Bruno Mars)",
     "artist": "Snoop Dogg / Wiz Khalifa / Bruno Mars"
