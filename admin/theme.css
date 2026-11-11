@@ -41,6 +41,127 @@ html[data-site-admin] dialog.sui.dialog .body { min-height:0; overscroll-behavio
 html[data-site-admin] [role="document"] { min-width:0; overflow-wrap:anywhere; }
 html[data-site-admin] [role="document"] :is(img,video,svg) { max-width:100%; }
 html[data-site-admin] [role="document"] img { height:auto; }
+
+/* Collection navigation: use the native theme and states with a 4px spacing
+   rhythm. Scope the geometry to this sidebar, away from editor field trees. */
+html[data-site-admin] .primary-sidebar:has(> [role="tree"]) {
+  --admin-sidebar-step: 4px;
+  --admin-sidebar-item-gap: var(--admin-sidebar-step);
+  --admin-sidebar-icon-gap: calc(var(--admin-sidebar-step) * 2);
+  --admin-sidebar-item-inset: calc(var(--admin-sidebar-step) * 3);
+  --admin-sidebar-gutter: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --admin-sidebar-group-gap: calc(var(--admin-sidebar-step) * 6);
+  --admin-sidebar-font-size: 16px;
+  --admin-sidebar-caption-size: 13px;
+  --admin-sidebar-icon-size: 14px;
+  --admin-sidebar-target: 44px;
+  --admin-sidebar-radius: var(--sui-control-medium-border-radius, 4px);
+  --sui-textbox-font-size: var(--admin-sidebar-font-size);
+  --sui-textbox-height: var(--admin-sidebar-target);
+  --sui-textbox-border-radius: var(--admin-sidebar-radius);
+  --sui-tree-border-radius: var(--admin-sidebar-radius);
+  --sui-tree-item-border-radius: var(--admin-sidebar-radius);
+  --sui-tree-item-height: var(--admin-sidebar-target);
+  --sui-tree-item-padding: var(--admin-sidebar-icon-gap) var(--admin-sidebar-item-inset);
+  font-size: var(--admin-sidebar-font-size);
+}
+
+html[data-site-admin] .primary-sidebar:has(> [role="tree"]) > header {
+  flex-shrink: 0;
+  padding-inline: calc(var(--admin-sidebar-gutter) + var(--admin-sidebar-item-inset));
+}
+
+html[data-site-admin] .primary-sidebar:has(> [role="tree"]) > header h2 {
+  padding: 0;
+}
+
+html[data-site-admin] .primary-sidebar:has(> [role="tree"]) .sui.search-bar {
+  flex-shrink: 0;
+  min-inline-size: 0;
+  margin-block: var(--admin-sidebar-step) 0;
+  margin-inline: var(--admin-sidebar-gutter);
+  border-radius: var(--admin-sidebar-radius);
+}
+
+html[data-site-admin] .primary-sidebar:has(> [role="tree"]) .sui.search-bar .icon {
+  font-size: var(--admin-sidebar-icon-size);
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree {
+  flex: 0 0 auto;
+  margin: var(--admin-sidebar-group-gap) var(--admin-sidebar-gutter) var(--admin-sidebar-gutter);
+  padding: 0;
+  overflow: visible;
+  font-size: var(--admin-sidebar-font-size);
+  line-height: 1.5;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree > .inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-sidebar-group-gap);
+  min-inline-size: 0;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree .sui.option-group {
+  margin: 0;
+  min-inline-size: 0;
+  border-radius: var(--admin-sidebar-radius);
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree .sui.option-group > .label {
+  margin: 0;
+  padding: 0 var(--admin-sidebar-item-inset) var(--admin-sidebar-icon-gap);
+  font-size: var(--admin-sidebar-caption-size);
+  line-height: 20px;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree .sui.option-group > .inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--admin-sidebar-item-gap);
+  min-inline-size: 0;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree [role="treeitem"] > .row {
+  gap: var(--admin-sidebar-icon-gap);
+  min-block-size: var(--admin-sidebar-target);
+  border-radius: var(--admin-sidebar-radius);
+  font-size: var(--admin-sidebar-font-size);
+  line-height: 1.5;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree [role="treeitem"] > .row > .icon {
+  flex: 0 0 var(--admin-sidebar-icon-size);
+  inline-size: var(--admin-sidebar-icon-size);
+  block-size: var(--admin-sidebar-icon-size);
+  font-size: var(--admin-sidebar-icon-size);
+  line-height: 1;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree [role="treeitem"] > .row > .label {
+  min-inline-size: 0;
+  padding: 0;
+  overflow: visible;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+html[data-site-admin] .primary-sidebar > .sui.tree [role="treeitem"] > .row > .count {
+  min-inline-size: 3ch;
+  padding: 0;
+  font-size: var(--admin-sidebar-caption-size);
+  line-height: 20px;
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+@media (pointer: coarse) {
+  html[data-site-admin] .primary-sidebar:has(> [role="tree"]) {
+    --admin-sidebar-target: 48px;
+  }
+}
+
 @media (pointer:coarse), (max-width:900px) {
   :root[data-site-admin] {
     --sui-button-small-height:44px;
