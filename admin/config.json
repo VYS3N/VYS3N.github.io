@@ -56,6 +56,16 @@
           "direction": "descending"
         }
       },
+      "view_groups": {
+        "groups": [
+          {
+            "name": "collection",
+            "label": "所属合集",
+            "field": "collection"
+          }
+        ],
+        "default": "collection"
+      },
       "fields": [
         {
           "name": "title",
@@ -237,6 +247,16 @@
           "field": "date",
           "direction": "descending"
         }
+      },
+      "view_groups": {
+        "groups": [
+          {
+            "name": "collection",
+            "label": "所属合集",
+            "field": "collection"
+          }
+        ],
+        "default": "collection"
       },
       "fields": [
         {
